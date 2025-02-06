@@ -1,4 +1,4 @@
-import Tanks from '../Tanks.js';
+import Cursor from '../CanvasItems/Cursor.js';
 import CanvasRenderer from '../Tools/CanvasRenderer.js';
 import KeyListener from '../Tools/KeyListener.js';
 import MouseListener from '../Tools/MouseListener.js';
@@ -8,15 +8,15 @@ export default abstract class Scene {
 
   protected maxY: number;
 
-  protected timeLeft: number;
+  protected bgImage: HTMLImageElement;
 
-  protected image: HTMLImageElement;
+  protected cursor: Cursor;
 
   public constructor(maxX: number, maxY: number) {
     this.maxX = maxX;
     this.maxY = maxY;
-    this.timeLeft = 0;
-    this.image = new Image();
+    this.bgImage = new Image();
+    this.cursor = new Cursor(maxX, maxY);
   }
 
   /**
