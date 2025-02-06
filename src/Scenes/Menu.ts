@@ -3,6 +3,7 @@ import KeyListener from '../Tools/KeyListener.js';
 import MouseListener from '../Tools/MouseListener.js';
 import CanvasRenderer from '../Tools/CanvasRenderer.js';
 import CollisionBox from '../CanvasItems/CollisionBox.js';
+import SelectLevel from './SelectLevel.js';
 
 export default class Menu extends Scene {
   private newGameButton: CollisionBox;
@@ -27,7 +28,6 @@ export default class Menu extends Scene {
 
     if (this.newGameButton.isCollidingWithCursor(mouseListener) && mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
       this.startNewGame = true;
-      console.log('click detected');
     }
   }
 
@@ -52,6 +52,9 @@ export default class Menu extends Scene {
    * @returns (Scene | null)
    */
   public override getNextScene(): Scene | null {
+    if (this.startNewGame === true) {
+      return new SelectLevel(this.maxX, this.maxY);
+    }
     return null;
   }
 
