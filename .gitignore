@@ -1,0 +1,60 @@
+### Node ###
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+# Dependency directories
+node_modules/
+# Optional npm cache directory
+.npm
+# Optional eslint cache
+.eslintcache
+# Optional REPL history
+.node_repl_history
+# Output of 'npm pack'
+*.tgz
+# Yarn Integrity file
+.yarn-integrity
+# dotenv environment variables file
+.env
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+# next.js build output
+.next
+
+### OSX ###
+### VisualStudioCode ###
+.vscode/*
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# End of https://www.gitignore.io/api/osx,node,linux,macos,windows,vagrant,intellij,visualstudiocode
+
+package-lock.json
+# Don't commit build artifacts either
+build/
+
+# drawio temp files
+*.drawio.bkp
+*.drawio.dtmp
+
+.prettierrc
