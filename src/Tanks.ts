@@ -20,8 +20,13 @@ export default class Tanks extends Game {
     super();
 
     this.canvas = canvas;
-    this.canvas.height = window.innerHeight;
-    this.canvas.width = window.innerWidth;
+    if (window.innerHeight >= window.innerWidth) {
+      this.canvas.height = window.innerWidth;
+      this.canvas.width = window.innerWidth;
+    } else {
+      this.canvas.height = window.innerHeight;
+      this.canvas.width = window.innerHeight;
+    }
     this.keyListener = new KeyListener;
     this.mouseListener = new MouseListener(this.canvas);
 
