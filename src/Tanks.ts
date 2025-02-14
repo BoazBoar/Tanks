@@ -14,7 +14,15 @@ export default class Tanks extends Game {
 
   private mouseListener: MouseListener;
 
+  public static cols: number = 24;
+
+  public static rows: number = 24;
+
+  public static tileSize: number = 32;
+
   public static currentScene: Scene;
+
+  public static multiplayer: boolean;
 
   public constructor(canvas: HTMLCanvasElement) {
     super();
@@ -31,6 +39,8 @@ export default class Tanks extends Game {
     this.mouseListener = new MouseListener(this.canvas);
 
     Tanks.currentScene = new Menu(this.canvas.width, this.canvas.height);
+
+    Tanks.multiplayer = false;
   }
 
   /**
