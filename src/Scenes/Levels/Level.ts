@@ -11,10 +11,6 @@ export default abstract class Level extends Scene {
 
   protected levelMapForeground: HTMLImageElement;
 
-  protected collisionArray: number[];
-
-  protected objectArray: CanvasItem[];
-
   protected player1: Player1;
 
   protected levelComplete: boolean;
@@ -26,8 +22,6 @@ export default abstract class Level extends Scene {
     this.levelMapBackground.src = 'assets/SelectLevelIcons.png';
     this.levelMapForeground = new Image();
     this.levelMapForeground.src = 'assets/SelectLevelIcons.png';
-    this.collisionArray = [];
-    this.objectArray = [];
 
     const player1SpriteSheet: HTMLImageElement = new Image();
     player1SpriteSheet.src = 'assets/tanksBaseTanksSpriteSheet.png';
