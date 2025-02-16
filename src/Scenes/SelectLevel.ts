@@ -10,6 +10,7 @@ export default class SelectLevel extends Scene {
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
 
+    this.bgImage.src = 'assets/LevelSelection/tanskLevelSelectionTutorial.png';
     this.levelSelectionArray = [];
   }
 
@@ -26,7 +27,7 @@ export default class SelectLevel extends Scene {
   }
 
   public override render(canvas: HTMLCanvasElement): void {
-    CanvasRenderer.fillCanvas(canvas, 'yellow');
+    CanvasRenderer.drawResizedImage(canvas, this.bgImage, 0, 0, this.maxX, this.maxY);
 
     // Always render the cursor on top of everything else
     this.cursor.render(canvas);
