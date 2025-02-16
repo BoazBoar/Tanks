@@ -1,3 +1,4 @@
+import CanvasItem from '../CanvasItems/CanvasItem.js';
 import Cursor from '../CanvasItems/Cursor.js';
 import CanvasRenderer from '../Tools/CanvasRenderer.js';
 import KeyListener from '../Tools/KeyListener.js';
@@ -10,12 +11,18 @@ export default abstract class Scene {
 
   protected bgImage: HTMLImageElement;
 
+  protected collisionArray: number[];
+
+  protected objectArray: CanvasItem[];
+
   protected cursor: Cursor;
 
   public constructor(maxX: number, maxY: number) {
     this.maxX = maxX;
     this.maxY = maxY;
     this.bgImage = new Image();
+    this.collisionArray = [];
+    this.objectArray = [];
     this.cursor = new Cursor(maxX, maxY);
   }
 
