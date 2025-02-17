@@ -4,18 +4,42 @@ import MouseListener from '../Tools/MouseListener.js';
 import CanvasRenderer from '../Tools/CanvasRenderer.js';
 import CollisionBox from '../CanvasItems/CollisionBox.js';
 import SelectLevel from './SelectLevel.js';
+import Tanks from '../Tanks.js';
 
 export default class Menu extends Scene {
-  private newGameButton: CollisionBox;
-
   private startNewGame: boolean;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
-    this.bgImage = CanvasRenderer.loadNewImage('assets/bgMainMenu.png');
+    this.bgImage.src = 'assets/tanksMainMenu.png';
 
-    this.newGameButton = new CollisionBox(maxX, maxY, maxX / 2, maxY / 1.5, 256, 64, 'assets/NewGameButton.png');
     this.startNewGame = false;
+
+    this.collisionArray = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 0, 0, 0, 0,
+      0, 0, 0, 0, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 0, 0, 0, 0,
+      0, 0, 0, 0, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 0, 0, 0, 0,
+      0, 0, 0, 0, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   }
 
   /**
@@ -26,8 +50,13 @@ export default class Menu extends Scene {
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
     this.cursor.setPosition(mouseListener.getMousePosition());
 
-    if (this.newGameButton.isCollidingWithCursor(mouseListener) && mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
-      this.startNewGame = true;
+    if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
+      const xDivider: number = this.maxX / Tanks.rows;
+      const yDivider: number = this.maxY / Tanks.cols;
+
+      const mouseRowOnGrid: number = Math.floor(mouseListener.getMousePosition().x / xDivider);
+      const mouseColOnGrid: number = Math.floor(mouseListener.getMousePosition().y / yDivider);
+      this.checkMouseCollision(mouseRowOnGrid, mouseColOnGrid);
     }
   }
 
@@ -47,6 +76,12 @@ export default class Menu extends Scene {
 
   }
 
+  public override checkMouseCollision(col: number, row: number): void {
+    if (this.collisionArray[Tanks.cols * row + col] === 300) {
+      this.startNewGame = true;
+    }
+  }
+
   /**
    * Get the NextScene (Store) when the player is ready.
    * @returns (Scene | null)
@@ -63,10 +98,7 @@ export default class Menu extends Scene {
    * @param HTMLCanvasElement canvas
    */
   public override render(canvas: HTMLCanvasElement): void {
-    // CanvasRenderer.drawResizedImage(canvas, this.bgImage, 0, 0, canvas.width, canvas.height);
-    CanvasRenderer.fillCanvas(canvas, 'white');
-
-    this.newGameButton.render(canvas);
+    CanvasRenderer.drawResizedImage(canvas, this.bgImage, 0, 0, this.maxX, this.maxY);
 
     // Always render the cursor on top of everything else
     this.cursor.render(canvas);

@@ -43,11 +43,31 @@ export default abstract class Level extends Scene {
   }
 
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
-
+    this.cursor.setPosition(mouseListener.getMousePosition());
   }
 
   public override update(elapsed: number): void {
 
+  }
+
+  public override checkMouseCollision(col: number, row: number): void {
+
+  }
+
+  /**
+ * Check if the given column & row would be a collision cell.
+ * Mostly used for blocking movement of GameObjects
+ *
+ * @param col horizontal value
+ * @param row vertical value
+ * @returns true if the cell is full, false if the cell is empty
+ */
+  public checkCollision(col: number, row: number): boolean {
+    if (this.collisionArray[Tanks.cols * row + col] === 1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public override getNextScene(): Scene | null {
