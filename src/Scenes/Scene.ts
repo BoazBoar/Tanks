@@ -46,6 +46,8 @@ export default abstract class Scene {
    */
   public abstract update(elapsed: number): void;
 
+  public abstract checkMouseCollision(col: number, row: number): void;
+
   /**
    * getNextScene returns null and does nothing, if it returns a Scene
    * we change WereldWinkel.currentScene to provided Scene

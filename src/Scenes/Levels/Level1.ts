@@ -1,4 +1,4 @@
-import Level from './Level';
+import Level from './Level.js';
 
 export default class Level1 extends Level {
   public constructor(maxX: number, maxY: number) {

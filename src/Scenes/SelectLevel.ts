@@ -1,10 +1,16 @@
 import CollisionBox from '../CanvasItems/CollisionBox.js';
+import Tanks from '../Tanks.js';
 import CanvasRenderer from '../Tools/CanvasRenderer.js';
 import KeyListener from '../Tools/KeyListener.js';
 import MouseListener from '../Tools/MouseListener.js';
+import Level1 from './Levels/Level1.js';
 import Scene from './Scene.js';
 
 export default class SelectLevel extends Scene {
+  protected screenNumber: number;
+
+  protected levelNumber: number;
+
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
 
@@ -34,17 +40,48 @@ export default class SelectLevel extends Scene {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    this.screenNumber = -1;
+    this.levelNumber = -1;
   }
 
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
     this.cursor.setPosition(mouseListener.getMousePosition());
+
+    if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
+      const xDivider: number = this.maxX / Tanks.rows;
+      const yDivider: number = this.maxY / Tanks.cols;
+
+      const mouseRowOnGrid: number = Math.floor(mouseListener.getMousePosition().x / xDivider);
+      const mouseColOnGrid: number = Math.floor(mouseListener.getMousePosition().y / yDivider);
+      this.checkMouseCollision(mouseRowOnGrid, mouseColOnGrid);
+    }
   }
 
   public override update(elapsed: number): void {
 
   }
 
+  public override checkMouseCollision(col: number, row: number): void {
+    let nextScreenNumber: number = -1;
+    for (let checkerNumber: number = 0; checkerNumber < 210; checkerNumber++) {
+      if (this.collisionArray[Tanks.cols * row + col] === checkerNumber) {
+        if (checkerNumber - 200 >= 0) {
+          nextScreenNumber = (checkerNumber - 200);
+        } else if (checkerNumber - 100 >= 0) {
+          this.levelNumber = checkerNumber - 100;
+        }
+      }
+    }
+    if (nextScreenNumber != -1) {
+      this.moveToScreen(nextScreenNumber);
+    }
+  }
+
   public override getNextScene(): Scene | null {
+    if (this.levelNumber === 1) {
+      return new Level1(this.maxX, this.maxY);
+    }
     return null;
   }
 
@@ -56,6 +93,7 @@ export default class SelectLevel extends Scene {
   }
 
   public moveToScreen(screenNumber: number): void {
+    this.screenNumber = screenNumber;
     if (screenNumber === 0) {
       this.bgImage.src = 'assets/LevelSelection/tanskLevelSelectionTutorial.png';
       this.collisionArray = [
@@ -245,6 +283,8 @@ export default class SelectLevel extends Scene {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 156, 156, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    } else {
+      throw new Error('invalid screen number');
     }
   }
 }
