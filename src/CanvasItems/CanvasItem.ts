@@ -1,3 +1,4 @@
+import Tanks from '../Tanks.js';
 import CanvasRenderer from '../Tools/CanvasRenderer.js';
 import MouseListener from '../Tools/MouseListener.js';
 import { Vector2 } from '../Types.js';
@@ -70,7 +71,8 @@ export default abstract class CanvasItem {
    * @param canvas space on which the CanvasItem is drawn
    */
   public render(canvas: HTMLCanvasElement): void {
-    CanvasRenderer.drawImage(canvas, this.image, this.position.x - this.image.width / 2, this.position.y - this.image.height / 2);
+    // CanvasRenderer.drawImage(canvas, this.image, this.position.x - this.image.width / 2, this.position.y - this.image.height / 2);
+    CanvasRenderer.drawResizedImage(canvas, this.image, this.position.x - (this.image.width * Tanks.resizeFactorX) / 2, this.position.y - (this.image.height * Tanks.resizeFactorY) / 2, this.getWidth() * Tanks.resizeFactorX, this.getHeight() * Tanks.resizeFactorY);
   }
 
   public getPosX(): number {

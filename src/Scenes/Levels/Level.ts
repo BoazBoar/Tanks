@@ -76,13 +76,13 @@ export default abstract class Level extends Scene {
 
   public override render(canvas: HTMLCanvasElement): void {
     // Background should always be drawn behind every other object
-    CanvasRenderer.drawImage(canvas, this.levelMapBackground, 0, 0);
+    CanvasRenderer.drawResizedImage(canvas, this.levelMapBackground, 0, 0, this.maxX, this.maxY);
 
     // Draw the player
     this.player1.render(canvas);
 
     // Foreground should always be drawn in front of every other object
-    CanvasRenderer.drawImage(canvas, this.levelMapForeground, 0, 0);
+    CanvasRenderer.drawResizedImage(canvas, this.levelMapForeground, 0, 0, this.maxX, this.maxY);
     // Always render the cursor on top of everything else
     this.cursor.render(canvas);
   }

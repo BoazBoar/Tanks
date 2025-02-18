@@ -24,6 +24,14 @@ export default class Tanks extends Game {
 
   public static multiplayer: boolean;
 
+  public maxX: number;
+
+  public maxY: number;
+
+  public static resizeFactorX: number;
+
+  public static resizeFactorY: number;
+
   public constructor(canvas: HTMLCanvasElement) {
     super();
 
@@ -38,7 +46,12 @@ export default class Tanks extends Game {
     this.keyListener = new KeyListener;
     this.mouseListener = new MouseListener(this.canvas);
 
-    Tanks.currentScene = new Menu(this.canvas.width, this.canvas.height);
+    this.maxX = this.canvas.width;
+    this.maxY = this.canvas.height;
+    Tanks.currentScene = new Menu(this.maxX, this.maxY);
+
+    Tanks.resizeFactorX = this.maxX / 768;
+    Tanks.resizeFactorY = this.maxY / 768;
 
     Tanks.multiplayer = false;
   }

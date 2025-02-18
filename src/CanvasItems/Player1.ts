@@ -7,6 +7,8 @@ export default class Player1 extends Controllable {
 
   private tankBase: Sprite;
 
+  private speed: number;
+
   public constructor(maxX: number, maxY: number,
     sprite: Sprite,
     posX: number,
@@ -16,5 +18,10 @@ export default class Player1 extends Controllable {
     this.tankBarrel = CanvasRenderer.loadNewImage('assets/tanksPlayer1.png');
     this.tankBase = sprite;
     this.position = {x: posX, y: posY};
+    this.speed = 10;
+  }
+
+  public override render(canvas: HTMLCanvasElement): void {
+
   }
 }
