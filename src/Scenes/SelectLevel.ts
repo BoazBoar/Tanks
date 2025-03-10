@@ -3,6 +3,7 @@ import Tanks from '../Tanks.js';
 import CanvasRenderer from '../Tools/CanvasRenderer.js';
 import KeyListener from '../Tools/KeyListener.js';
 import MouseListener from '../Tools/MouseListener.js';
+import Level0 from './Levels/Level0.js';
 import Level1 from './Levels/Level1.js';
 import Scene from './Scene.js';
 
@@ -46,7 +47,7 @@ export default class SelectLevel extends Scene {
   }
 
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
-    this.cursor.setPosition(mouseListener.getMousePosition());
+    this.cursor.setPosition({ x: mouseListener.getMousePosition().x, y: mouseListener.getMousePosition().y });
 
     if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
       const xDivider: number = this.maxX / Tanks.rows;
@@ -54,7 +55,7 @@ export default class SelectLevel extends Scene {
 
       const mouseRowOnGrid: number = Math.floor(mouseListener.getMousePosition().x / xDivider);
       const mouseColOnGrid: number = Math.floor(mouseListener.getMousePosition().y / yDivider);
-      this.checkMouseCollision(mouseRowOnGrid, mouseColOnGrid);
+      this.checkCollision(mouseRowOnGrid, mouseColOnGrid);
     }
   }
 
@@ -62,7 +63,7 @@ export default class SelectLevel extends Scene {
 
   }
 
-  public override checkMouseCollision(col: number, row: number): void {
+  public override checkCollision(col: number, row: number): boolean {
     let nextScreenNumber: number = -1;
     for (let checkerNumber: number = 0; checkerNumber < 210; checkerNumber++) {
       if (this.collisionArray[Tanks.cols * row + col] === checkerNumber) {
@@ -76,9 +77,13 @@ export default class SelectLevel extends Scene {
     if (nextScreenNumber != -1) {
       this.moveToScreen(nextScreenNumber);
     }
+    return false;
   }
 
   public override getNextScene(): Scene | null {
+    if (this.levelNumber === 0) {
+      return new Level0(this.maxX, this.maxY);
+    }
     if (this.levelNumber === 1) {
       return new Level1(this.maxX, this.maxY);
     }
