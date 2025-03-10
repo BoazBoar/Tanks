@@ -46,7 +46,7 @@ export default abstract class Scene {
    */
   public abstract update(elapsed: number): void;
 
-  public abstract checkMouseCollision(col: number, row: number): void;
+  public abstract checkCollision(col: number, row: number): boolean;
 
   /**
    * getNextScene returns null and does nothing, if it returns a Scene

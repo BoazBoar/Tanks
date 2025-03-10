@@ -1,11 +1,20 @@
+import Tanks from '../../Tanks.js';
 import Level from './Level.js';
 
 export default class Level1 extends Level {
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
 
-    this.levelMapBackground.src = 'assets/LevelBackgrounds/tanksLevel1Background.png';
-    this.levelMapForeground.src = 'assets/LevelForegrounds/tanksLevel1Foreground.png';
+    this.levelMapBackground.src = 'assets/LevelBackgrounds/tanksWorld1Level1Background.png';
+    this.levelMapForeground.src = 'assets/LevelForegrounds/tanksWorld1Level1Foreground.png';
+
+    if (Tanks.multiplayer) {
+      this.player1SpawnCoördinates = { x: 4, y: 11 };
+    } else {
+      this.player1SpawnCoördinates = { x: 4, y: 14 };
+    }
+
+    this.spawnTanks();
 
     this.collisionArray = [ // 1 equals solid tile
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -32,5 +41,11 @@ export default class Level1 extends Level {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  }
+
+  public spawnTanks(): void {
+    this.player1.setSpawnPoint(this.player1SpawnCoördinates.x, this.player1SpawnCoördinates.y);
+
+    this.objectArray.push(this.player1);
   }
 }

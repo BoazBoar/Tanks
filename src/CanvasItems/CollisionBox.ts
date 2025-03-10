@@ -16,7 +16,7 @@ export default class CollisionBox extends CanvasItem {
   }
 
   /**
-   * Draw the player object on the provided canvas.
+   * Draw the collision object on the provided canvas.
    */
   public override render(canvas: HTMLCanvasElement): void {
     CanvasRenderer.drawResizedImage(canvas, this.image, this.position.x, this.position.y, this.width, this.height);

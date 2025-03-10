@@ -48,7 +48,8 @@ export default class Menu extends Scene {
    * @param MouseListener mouseListener
    */
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
-    this.cursor.setPosition(mouseListener.getMousePosition());
+    // this.cursor.setPosition(mouseListener.getMousePosition());
+    this.cursor.setPosition({ x: mouseListener.getMousePosition().x, y: mouseListener.getMousePosition().y });
 
     if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
       const xDivider: number = this.maxX / Tanks.rows;
@@ -56,7 +57,7 @@ export default class Menu extends Scene {
 
       const mouseRowOnGrid: number = Math.floor(mouseListener.getMousePosition().x / xDivider);
       const mouseColOnGrid: number = Math.floor(mouseListener.getMousePosition().y / yDivider);
-      this.checkMouseCollision(mouseRowOnGrid, mouseColOnGrid);
+      this.checkCollision(mouseRowOnGrid, mouseColOnGrid);
     }
   }
 
@@ -76,10 +77,12 @@ export default class Menu extends Scene {
 
   }
 
-  public override checkMouseCollision(col: number, row: number): void {
+  public override checkCollision(col: number, row: number): boolean {
     if (this.collisionArray[Tanks.cols * row + col] === 300) {
       this.startNewGame = true;
+      return true;
     }
+    return false;
   }
 
   /**

@@ -1,20 +1,16 @@
 import CanvasRenderer from '../Tools/CanvasRenderer.js';
-import Controllable from './Controllable.js';
-import { Sprite } from '../Types.js';
+import { Sprite, Vector2 } from '../Types.js';
+import Tanks from '../Tanks.js';
+import TankObjects from './TankObjects.js';
 
-export default class Player1 extends Controllable {
-  private tankBarrel: HTMLImageElement;
-
-  private tankBase: Sprite;
-
+export default class Player1 extends TankObjects {
   public constructor(maxX: number, maxY: number,
     sprite: Sprite,
     posX: number,
     posY: number) {
-    super(maxX, maxY);
+    super(maxX, maxY, sprite, posX, posY);
 
     this.tankBarrel = CanvasRenderer.loadNewImage('assets/tanksPlayer1.png');
-    this.tankBase = sprite;
-    this.position = {x: posX, y: posY};
+    this.speed = 0.07;
   }
 }
