@@ -28,9 +28,7 @@ export default class Tanks extends Game {
 
   public maxY: number;
 
-  public static resizeFactorX: number;
-
-  public static resizeFactorY: number;
+  public static resizeFactor: number;
 
   public constructor(canvas: HTMLCanvasElement) {
     super();
@@ -43,15 +41,21 @@ export default class Tanks extends Game {
       this.canvas.height = window.innerHeight;
       this.canvas.width = window.innerHeight;
     }
+    if (this.canvas.width > Tanks.cols * Tanks.tileSize) {
+      this.canvas.width = Tanks.rows * Tanks.tileSize;
+    }
+    if (this.canvas.height > Tanks.rows * Tanks.tileSize) {
+      this.canvas.height = Tanks.cols * Tanks.tileSize;
+    }
+
     this.keyListener = new KeyListener;
     this.mouseListener = new MouseListener(this.canvas);
 
     this.maxX = this.canvas.width;
     this.maxY = this.canvas.height;
-    Tanks.currentScene = new Menu(this.maxX, this.maxY);
+    Tanks.resizeFactor = this.maxX / 768;
 
-    Tanks.resizeFactorX = this.maxX / 768;
-    Tanks.resizeFactorY = this.maxY / 768;
+    Tanks.currentScene = new Menu(this.maxX, this.maxY);
 
     Tanks.multiplayer = false;
   }

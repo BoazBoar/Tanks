@@ -42,10 +42,10 @@ export default abstract class CanvasItem {
   }
 
   /**
- * TODO: should check if an item overlaps with the cursor
- * @param item item to check collision for
- * @returns true if item is overlapping, otherwise returns false
- */
+   * TODO: should check if an item overlaps with the cursor
+   * @param item item to check collision for
+   * @returns true if item is overlapping, otherwise returns false
+   */
   public isCollidingWithCursor(mouse: MouseListener): boolean {
     if (this.position.x < mouse.getMousePosition().x &&
       this.position.x + this.getWidth() > mouse.getMousePosition().x &&
@@ -72,7 +72,7 @@ export default abstract class CanvasItem {
    */
   public render(canvas: HTMLCanvasElement): void {
     // CanvasRenderer.drawImage(canvas, this.image, this.position.x - this.image.width / 2, this.position.y - this.image.height / 2);
-    CanvasRenderer.drawResizedImage(canvas, this.image, this.position.x - (this.image.width * Tanks.resizeFactorX) / 2, this.position.y - (this.image.height * Tanks.resizeFactorY) / 2, this.getWidth() * Tanks.resizeFactorX, this.getHeight() * Tanks.resizeFactorY);
+    CanvasRenderer.drawResizedImage(canvas, this.image, this.position.x - (this.image.width * Tanks.resizeFactor) / 2, this.position.y - (this.image.height * Tanks.resizeFactor) / 2, this.getWidth() * Tanks.resizeFactor, this.getHeight() * Tanks.resizeFactor);
   }
 
   public getPosX(): number {
