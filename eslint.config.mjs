@@ -31,7 +31,7 @@ export default tseslint.config(
             "camelcase": "off",
             "@stylistic/array-bracket-spacing": ["warn", "never"],
             "@stylistic/eol-last": ["warn", "always"],
-            "@stylistic/max-len": ["warn", 300, 2, {
+            "@stylistic/max-len": ["warn", 350, 2, {
                 ignoreUrls: true,
                 ignoreComments: false,
                 ignoreRegExpLiterals: true,
