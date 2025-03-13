@@ -6,6 +6,8 @@ import CanvasItem from './CanvasItem.js';
 export default abstract class TankObjects extends CanvasItem {
   protected tankBarrel: HTMLImageElement;
 
+  protected barrelAngle: number;
+
   protected tankBase: Sprite;
 
   protected width: number;
@@ -14,7 +16,9 @@ export default abstract class TankObjects extends CanvasItem {
 
   protected speed: number;
 
-  protected movementDirection: string;
+  protected currentMovementDirection: string;
+
+  protected lastMovementDirection: string;
 
   public constructor(maxX: number, maxY: number,
     sprite: Sprite,
@@ -23,47 +27,54 @@ export default abstract class TankObjects extends CanvasItem {
     super(maxX, maxY);
 
     this.tankBarrel = CanvasRenderer.loadNewImage('');
+    this.barrelAngle = 0;
     this.tankBase = sprite;
     this.position = { x: posX, y: posY };
     this.width = sprite.width * Tanks.resizeFactor;
     this.height = sprite.height * Tanks.resizeFactor;
     this.speed = 0;
-    this.movementDirection = 'Still';
+    this.currentMovementDirection = 'Still';
+    this.lastMovementDirection = 'Still';
   }
 
   public update(elapsed: number): void {
-    if (this.movementDirection === 'Right') {
+    // console.log(this.barrelAngle);
+
+    if (this.currentMovementDirection === 'Right') {
       this.changePosition(this.position.x + elapsed * this.speed, this.position.y);
-    } else if (this.movementDirection === 'Left') {
+    } else if (this.currentMovementDirection === 'Left') {
       this.changePosition(this.position.x - elapsed * this.speed, this.position.y);
-    } else if (this.movementDirection === 'Up') {
+    } else if (this.currentMovementDirection === 'Up') {
       this.changePosition(this.position.x, this.position.y - elapsed * this.speed);
-    } else if (this.movementDirection === 'Down') {
+    } else if (this.currentMovementDirection === 'Down') {
       this.changePosition(this.position.x, this.position.y + elapsed * this.speed);
-    } else if (this.movementDirection === 'RightUp') {
+    } else if (this.currentMovementDirection === 'RightUp') {
       this.changePosition(this.position.x + elapsed * this.speed, this.position.y - elapsed * this.speed);
-    } else if (this.movementDirection === 'RightDown') {
+    } else if (this.currentMovementDirection === 'RightDown') {
       this.changePosition(this.position.x + elapsed * this.speed, this.position.y + elapsed * this.speed);
-    } else if (this.movementDirection === 'LeftUp') {
+    } else if (this.currentMovementDirection === 'LeftUp') {
       this.changePosition(this.position.x - elapsed * this.speed, this.position.y - elapsed * this.speed);
-    } else if (this.movementDirection === 'LeftDown') {
+    } else if (this.currentMovementDirection === 'LeftDown') {
       this.changePosition(this.position.x - elapsed * this.speed, this.position.y + elapsed * this.speed);
     }
+    if (this.currentMovementDirection !== 'Still') {
+      this.lastMovementDirection = this.currentMovementDirection;
+    }
+
     this.changeSprite();
-    this.movementDirection = 'Still';
   }
 
   public changeSprite(): void {
-    if (this.movementDirection === 'Left' || this.movementDirection === 'Right') {
+    if (this.currentMovementDirection === 'Left' || this.currentMovementDirection === 'Right') {
       this.tankBase.x = 0;
       this.tankBase.y = 0;
-    } else if (this.movementDirection === 'Up' || this.movementDirection === 'Down') {
+    } else if (this.currentMovementDirection === 'Up' || this.currentMovementDirection === 'Down') {
       this.tankBase.x = 1;
       this.tankBase.y = 0;
-    } else if (this.movementDirection === 'RightUp' || this.movementDirection === 'LeftDown') {
+    } else if (this.currentMovementDirection === 'RightUp' || this.currentMovementDirection === 'LeftDown') {
       this.tankBase.x = 0;
       this.tankBase.y = 1;
-    } else if (this.movementDirection === 'LeftUp' || this.movementDirection === 'RightDown') {
+    } else if (this.currentMovementDirection === 'LeftUp' || this.currentMovementDirection === 'RightDown') {
       this.tankBase.x = 1;
       this.tankBase.y = 1;
     }
@@ -85,7 +96,7 @@ export default abstract class TankObjects extends CanvasItem {
     const newWantedX: number = (wantedX - this.position.x) / 2 + this.position.x;
     const newWantedY: number = (wantedY - this.position.y) / 2 + this.position.y;
 
-    if (this.movementDirection === 'RightUp' || this.movementDirection === 'RightDown' || this.movementDirection === 'LeftUp' || this.movementDirection === 'LeftDown') {
+    if (this.currentMovementDirection === 'RightUp' || this.currentMovementDirection === 'RightDown' || this.currentMovementDirection === 'LeftUp' || this.currentMovementDirection === 'LeftDown') {
       if (!Tanks.currentScene.checkCollision(Math.floor(newWantedX / Tanks.tileSize), Math.floor(this.position.y / Tanks.tileSize)) &&
         !Tanks.currentScene.checkCollision(Math.floor((newWantedX + this.tankBase.width) / Tanks.tileSize), Math.floor(this.position.y / Tanks.tileSize)) &&
         !Tanks.currentScene.checkCollision(Math.floor(newWantedX / Tanks.tileSize), Math.floor((this.position.y + this.tankBase.height) / Tanks.tileSize)) &&
@@ -123,10 +134,50 @@ export default abstract class TankObjects extends CanvasItem {
       this.width * 1,
       this.height * 1
     );
+    // console.log(this.position.x + this.tankBase.width);
+
+    let tankBarrelRelativeX: number = 0;
+    let tankBarrelRelativeY: number = 0;
+
+    tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
+    tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5)) * Tanks.resizeFactor;
+
+    // if (this.lastMovementDirection === 'Right') {
+    //   tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (10)) * Tanks.resizeFactor;
+    // } else if (this.lastMovementDirection === 'Left') {
+    //   tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (10)) * Tanks.resizeFactor;
+    // // } else if (this.lastMovementDirection === 'Up') {
+    // //   tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
+    // //   tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 3)) * Tanks.resizeFactor;
+    // // } else if (this.lastMovementDirection === 'Down') {
+    // //   tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
+    // //   tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+    // // } else if (this.lastMovementDirection === 'RightUp') {
+    // //   tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
+    // //   tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+    // // } else if (this.lastMovementDirection === 'RightDown') {
+    // //   tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
+    // //   tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+    // // } else if (this.lastMovementDirection === 'LeftUp') {
+    // //   tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
+    // //   tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+    // // } else if (this.lastMovementDirection === 'LeftDown') {
+    // //   tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
+    // //   tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+    // // } else {
+    // //   tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 1.5)) * Tanks.resizeFactor;
+    // //   tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 3)) * Tanks.resizeFactor;
+    // }
+
+    CanvasRenderer.drawRotatedImage(canvas, this.tankBarrel, tankBarrelRelativeX, tankBarrelRelativeY, this.tankBarrel.width * Tanks.resizeFactor, this.tankBarrel.height * Tanks.resizeFactor, this.barrelAngle);
   }
 
   public setMovementDirection(direction: string): void {
-    this.movementDirection = direction;
+    this.currentMovementDirection = direction;
+  }
+
+  public setBarrelAngle(x: number, y: number): void {
+    this.barrelAngle = Math.atan2(y, x);
   }
 
   public setSpawnPoint(col: number, row: number): void {
@@ -140,5 +191,13 @@ export default abstract class TankObjects extends CanvasItem {
 
   public override getHeight(): number {
     return this.height;
+  }
+
+  public getBarrelWidth(): number {
+    return this.tankBarrel.width;
+  }
+
+  public getBarrelHeight(): number {
+    return this.tankBarrel.height;
   }
 }
