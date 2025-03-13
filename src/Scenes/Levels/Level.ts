@@ -49,7 +49,13 @@ export default abstract class Level extends Scene {
   public abstract spawnTanks(): void;
 
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
-    this.cursor.setPosition(mouseListener.getMousePosition());
+    this.cursor.setPosition({ x: mouseListener.getMousePosition().x, y: mouseListener.getMousePosition().y });
+
+    const calcAngleX: number = mouseListener.getMousePosition().x - ((this.player1.getPosX() + (this.player1.getBarrelWidth() / 2)) * Tanks.resizeFactor);
+    const calcAngleY: number = mouseListener.getMousePosition().y - ((this.player1.getPosY() + (this.player1.getBarrelHeight() / 2)) * Tanks.resizeFactor);
+    // console.log(this.player1.getPosX());
+    // console.log('X: ' + calcAngleX + ', Y: ' + calcAngleY);
+    this.player1.setBarrelAngle(calcAngleX, calcAngleY);
 
     if (keyListener.isKeyDown(KeyListener.KEY_RIGHT) && keyListener.isKeyDown(KeyListener.KEY_UP)) {
       this.player1.setMovementDirection('RightUp');
@@ -67,6 +73,8 @@ export default abstract class Level extends Scene {
       this.player1.setMovementDirection('Down');
     } else if (keyListener.isKeyDown(KeyListener.KEY_LEFT)) {
       this.player1.setMovementDirection('Left');
+    } else {
+      this.player1.setMovementDirection('Still');
     }
   }
 

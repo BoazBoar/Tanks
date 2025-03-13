@@ -1,3 +1,5 @@
+import { Vector2 } from '../Types.js';
+
 /**
  * Helper utility class for working with the HTML Canvas Element.
  *
@@ -209,10 +211,30 @@ export default class CanvasRenderer {
     dx: number,
     dy: number,
     width: number,
-    height: number
+    height: number,
+    angle: number = 0
   ): void {
     const ctx: CanvasRenderingContext2D = CanvasRenderer.getCanvasContext(canvas);
     ctx.drawImage(image, dx, dy, width, height);
+    ctx.imageSmoothingEnabled = false;
+  }
+
+  public static drawRotatedImage(
+    canvas: HTMLCanvasElement,
+    image: HTMLImageElement,
+    dx: number,
+    dy: number,
+    width: number,
+    height: number,
+    angle: number = 0
+  ): void {
+    const ctx: CanvasRenderingContext2D = CanvasRenderer.getCanvasContext(canvas);
+    const pivot2: Vector2 = { x: -width / 2, y: -height / 2};
+    ctx.translate(dx - pivot2.x, dy - pivot2.y);
+    ctx.rotate(angle);
+    ctx.translate(-dx + pivot2.x, -dy + pivot2.y);
+    ctx.drawImage(image, dx, dy, width, height);
+    ctx.resetTransform();
     ctx.imageSmoothingEnabled = false;
   }
 }
