@@ -11,7 +11,7 @@ export default class Player1 extends TankObjects {
     posY: number) {
     super(maxX, maxY, sprite, posX, posY);
 
-    this.tankBarrel = CanvasRenderer.loadNewImage('assets/tanksPlayer1.png');
+    this.tankBarrel = CanvasRenderer.loadNewImage('assets/TankSprites/tanksPlayer1.png');
     this.name = 'Player1';
     this.speed = 0.07;
     this.bulletsLeft = 9;

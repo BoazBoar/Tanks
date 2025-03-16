@@ -30,7 +30,7 @@ export default abstract class Level extends Scene {
 
     this.player1SpawnCoördinates = { x: 0, y: 0 };
     const player1SpriteSheet: HTMLImageElement = new Image();
-    player1SpriteSheet.src = 'assets/tanksBasePlayer1TanksSpriteSheet.png';
+    player1SpriteSheet.src = 'assets/TankSprites/tanksBasePlayer1TanksSpriteSheet.png';
     this.player1 = new Player1(
       maxX,
       maxY,
