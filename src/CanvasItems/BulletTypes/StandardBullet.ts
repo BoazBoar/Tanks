@@ -10,7 +10,7 @@ export default class StandardBullet extends BulletObject {
 
     this.name = 'Standard';
     this.speed = 0.2 * Tanks.resizeFactor;
-    this.bouncesLeft = 3;
+    this.bouncesLeft = 2;
   }
 
   public override update(elapsed: number): void {
