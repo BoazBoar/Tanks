@@ -1,8 +1,8 @@
-import CanvasRenderer from '../Tools/CanvasRenderer.js';
-import { Sprite } from '../Types.js';
+import CanvasRenderer from '../../Tools/CanvasRenderer.js';
+import { Sprite } from '../../Types.js';
 import TankObjects from './TankObjects.js';
-import BulletObject from './BulletTypes/BulletObject.js';
-import StandardBullet from './BulletTypes/StandardBullet.js';
+import BulletObject from '../BulletTypes/BulletObject.js';
+import StandardBullet from '../BulletTypes/StandardBullet.js';
 
 export default class Player1 extends TankObjects {
   public constructor(maxX: number, maxY: number,

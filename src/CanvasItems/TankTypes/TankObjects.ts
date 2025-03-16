@@ -1,7 +1,7 @@
-import Tanks from '../Tanks.js';
-import CanvasRenderer from '../Tools/CanvasRenderer.js';
-import { Sprite } from '../Types.js';
-import CanvasItem from './CanvasItem.js';
+import Tanks from '../../Tanks.js';
+import CanvasRenderer from '../../Tools/CanvasRenderer.js';
+import { Sprite } from '../../Types.js';
+import CanvasItem from '../CanvasItem.js';
 
 export default abstract class TankObjects extends CanvasItem {
   protected tankBase: Sprite;
