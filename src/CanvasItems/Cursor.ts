@@ -9,6 +9,10 @@ export default class Cursor extends CanvasItem {
     this.image = CanvasRenderer.loadNewImage('assets/AimCursorNew.png');
   }
 
+  public override update(elapsed: number): void {
+    // Empty
+  }
+
   public setPosition(newPosition: Vector2): void {
     this.position = newPosition;
   }

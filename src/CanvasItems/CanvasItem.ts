@@ -25,6 +25,8 @@ export default abstract class CanvasItem {
     };
   }
 
+  public abstract update(elapsed: number): void;
+
   /**
    * TODO: should check if an item overlaps with another
    * @param item item to check collision for

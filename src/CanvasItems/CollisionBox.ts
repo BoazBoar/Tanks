@@ -15,6 +15,10 @@ export default class CollisionBox extends CanvasItem {
     this.image = CanvasRenderer.loadNewImage(imageName);
   }
 
+  public override update(elapsed: number): void {
+    // Empty
+  }
+
   /**
    * Draw the collision object on the provided canvas.
    */
