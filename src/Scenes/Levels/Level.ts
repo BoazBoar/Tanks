@@ -1,5 +1,7 @@
+import BulletObject from '../../CanvasItems/BulletTypes/BulletObject.js';
 import CanvasItem from '../../CanvasItems/CanvasItem.js';
 import Player1 from '../../CanvasItems/Player1.js';
+import TankObjects from '../../CanvasItems/TankObjects.js';
 import Tanks from '../../Tanks.js';
 import CanvasRenderer from '../../Tools/CanvasRenderer.js';
 import KeyListener from '../../Tools/KeyListener.js';
@@ -53,9 +55,14 @@ export default abstract class Level extends Scene {
 
     const calcAngleX: number = mouseListener.getMousePosition().x - ((this.player1.getPosX() + (this.player1.getBarrelWidth() / 2)) * Tanks.resizeFactor);
     const calcAngleY: number = mouseListener.getMousePosition().y - ((this.player1.getPosY() + (this.player1.getBarrelHeight() / 2)) * Tanks.resizeFactor);
-    // console.log(this.player1.getPosX());
-    // console.log('X: ' + calcAngleX + ', Y: ' + calcAngleY);
     this.player1.setBarrelAngle(calcAngleX, calcAngleY);
+
+    if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT) || keyListener.keyPressed(KeyListener.KEY_SPACE)) {
+      if (this.player1.getBulletsLeft() > 0) {
+        this.player1.changeBulletsLeft(-1);
+        this.objectArray.push(this.player1.getBulletType());
+      }
+    }
 
     if (keyListener.isKeyDown(KeyListener.KEY_RIGHT) && keyListener.isKeyDown(KeyListener.KEY_UP)) {
       this.player1.setMovementDirection('RightUp');
@@ -79,7 +86,22 @@ export default abstract class Level extends Scene {
   }
 
   public override update(elapsed: number): void {
-    this.player1.update(elapsed);
+    for (const object of this.objectArray) {
+      object.update(elapsed);
+      if (object instanceof BulletObject) {
+        if (object.getShouldBeDestroyed()) {
+          if (object.getOwner() === 'Player1') {
+            this.player1.changeBulletsLeft(1);
+          }
+          this.objectArray.splice(this.objectArray.indexOf(object), 1);
+        }
+      }
+      if (object instanceof TankObjects) {
+        if (object.getShouldBeDestroyed()) {
+          this.objectArray.splice(this.objectArray.indexOf(object), 1);
+        }
+      }
+    }
   }
 
   /**
@@ -90,7 +112,7 @@ export default abstract class Level extends Scene {
  * @param row vertical value
  * @returns true if the cell is full, false if the cell is empty
  */
-  public checkCollision(col: number, row: number): boolean {
+  public override checkCollision(col: number, row: number): boolean {
     if (this.collisionArray[Tanks.cols * row + col] === 1) {
       return true;
     } else {
@@ -106,8 +128,10 @@ export default abstract class Level extends Scene {
     // Background should always be drawn behind every other object
     CanvasRenderer.drawResizedImage(canvas, this.levelMapBackground, 0, 0, this.maxX, this.maxY);
 
-    // Draw the player
-    this.player1.render(canvas);
+    // render everything inside the objectArray
+    for (const object of this.objectArray) {
+      object.render(canvas);
+    }
 
     // Foreground should always be drawn in front of every other object
     CanvasRenderer.drawResizedImage(canvas, this.levelMapForeground, 0, 0, this.maxX, this.maxY);
