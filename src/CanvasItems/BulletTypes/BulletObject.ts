@@ -25,33 +25,35 @@ export default abstract class BulletObject extends CanvasItem {
   }
 
   public changePosition(wantedX: number, wantedY: number): void {
-    if (!Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.resizeFactor / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize)) &&
-      !Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize)) &&
-      !Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.resizeFactor / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize)) &&
-      !Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize))) {
-      this.position.x = wantedX;
-      this.position.y = wantedY;
-    } else {
-      if (this.bouncesLeft <= 0) {
-        this.shouldBeDestroyed = true;
-      } else {
-        this.bouncesLeft -= 1;
-        if ((Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.resizeFactor / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize)) &&
-          Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize))) ||
-          (Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.resizeFactor / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize)) &&
-            Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize)))) {
-          this.angle *= -1;
-        } else if ((Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.resizeFactor / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize)) &&
-        Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor) / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize))) ||
-        (Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize)) &&
-        Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize)))) {
-          this.angle = (Math.PI / 2) + ((Math.PI / 2) - this.angle);
-        } else {
-          throw new Error('Couldn`t discover what side of this bullet collided with the wall');
-        }
+    if (Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.resizeFactor / Tanks.tileSize), Math.floor(this.position.y / Tanks.resizeFactor / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor(this.position.y / Tanks.resizeFactor / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.resizeFactor / Tanks.tileSize), Math.floor((this.position.y / Tanks.resizeFactor + this.image.height) / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor((this.position.y / Tanks.resizeFactor + this.image.height) / Tanks.tileSize))) {
+      if (this.allowedToBounce()) {
+        this.switchAngle('X');
+        this.position.x -= wantedX - this.position.x;
       }
-      // TODO: Implement bounce feature
-      // throw new Error('stop');
+    } else {
+      this.position.x = wantedX;
+    }
+    if (Tanks.currentScene.checkCollision(Math.floor(this.position.x / Tanks.resizeFactor / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor((this.position.x / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor(this.position.x / Tanks.resizeFactor / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor((this.position.x / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize))) {
+      if (this.allowedToBounce()) {
+        this.switchAngle('Y');
+        this.position.y -= wantedY - this.position.y;
+      }
+    } else {
+      this.position.y = wantedY;
+    }
+  }
+
+  public switchAngle(axis: string): void {
+    if (axis === 'x' || axis === 'X') {
+      this.angle = (Math.PI / 2) + ((Math.PI / 2) - this.angle);
+    } else if (axis === 'y' || axis === 'Y') {
+      this.angle *= -1;
     }
   }
 
@@ -65,6 +67,16 @@ export default abstract class BulletObject extends CanvasItem {
 
   public getBouncesLeft(): number {
     return this.bouncesLeft;
+  }
+
+  public allowedToBounce(): boolean {
+    if (this.bouncesLeft <= 0) {
+      this.shouldBeDestroyed = true;
+      return false;
+    } else {
+      this.bouncesLeft -= 1;
+      return true;
+    }
   }
 
   public getShouldBeDestroyed(): boolean {
