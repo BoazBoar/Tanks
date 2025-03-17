@@ -33,10 +33,11 @@ export default abstract class CanvasItem {
    * @returns true if item is overlapping, otherwise returns false
    */
   public isCollidingWithItem(item: CanvasItem): boolean {
-    if (this.position.x < item.position.x + item.getWidth() &&
-      this.position.x + this.getWidth() > item.position.x &&
-      this.position.y < item.position.y + item.getHeight() &&
-      this.position.y + this.getHeight() > item.position.y) {
+    // TODO: fix item collision
+    if (this.position.x * Tanks.resizeFactor < item.position.x + item.getWidth() * Tanks.resizeFactor &&
+      this.position.x * Tanks.resizeFactor + this.getWidth() > item.position.x * Tanks.resizeFactor &&
+      this.position.y * Tanks.resizeFactor < item.position.y + item.getHeight() * Tanks.resizeFactor &&
+      this.position.y * Tanks.resizeFactor + this.getHeight() > item.position.y * Tanks.resizeFactor) {
       return true;
     } else {
       return false;

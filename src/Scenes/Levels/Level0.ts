@@ -1,3 +1,5 @@
+import TankObjects from '../../CanvasItems/TankTypes/TankObjects.js';
+import WhiteTank from '../../CanvasItems/TankTypes/WhiteTank.js';
 import Tanks from '../../Tanks.js';
 import Level from './Level.js';
 
@@ -47,6 +49,65 @@ export default class Level0 extends Level {
   public spawnTanks(): void {
     this.player1.setSpawnPoint(this.player1SpawnCoördinates.x, this.player1SpawnCoördinates.y);
 
-    this.objectArray.push(this.player1);
+    const whiteTankSpriteSheet: HTMLImageElement = new Image();
+    whiteTankSpriteSheet.src = 'assets/TankSprites/tanksWhiteTankSpriteSheet.png';
+    const whiteTank1: WhiteTank = new WhiteTank(
+      this.maxX,
+      this.maxY,
+      {
+        image: whiteTankSpriteSheet,
+        x: 0,
+        y: 0,
+        width: 30,
+        height: 28
+      },
+      3,
+      8,
+      'WhiteTank1',
+      'Right');
+    const whiteTank2: WhiteTank = new WhiteTank(
+      this.maxX,
+      this.maxY,
+      {
+        image: whiteTankSpriteSheet,
+        x: 0,
+        y: 0,
+        width: 30,
+        height: 28
+      },
+      16,
+      8,
+      'WhiteTank2',
+      'Down');
+    const whiteTank3: WhiteTank = new WhiteTank(
+      this.maxX,
+      this.maxY,
+      {
+        image: whiteTankSpriteSheet,
+        x: 0,
+        y: 0,
+        width: 30,
+        height: 28
+      },
+      20,
+      8,
+      'WhiteTank3',
+      'Down');
+    const whiteTank4: WhiteTank = new WhiteTank(
+      this.maxX,
+      this.maxY,
+      {
+        image: whiteTankSpriteSheet,
+        x: 0,
+        y: 0,
+        width: 30,
+        height: 28
+      },
+      18,
+      18,
+      'WhiteTank4',
+      'Up');
+
+    this.objectArray.push(this.player1, whiteTank1, whiteTank2, whiteTank3, whiteTank4);
   }
 }

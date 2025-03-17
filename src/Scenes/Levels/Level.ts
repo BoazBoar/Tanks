@@ -1,7 +1,7 @@
 import BulletObject from '../../CanvasItems/BulletTypes/BulletObject.js';
 import CanvasItem from '../../CanvasItems/CanvasItem.js';
-import Player1 from '../../CanvasItems/Player1.js';
-import TankObjects from '../../CanvasItems/TankObjects.js';
+import Player1 from '../../CanvasItems/TankTypes/Player1.js';
+import TankObjects from '../../CanvasItems/TankTypes/TankObjects.js';
 import Tanks from '../../Tanks.js';
 import CanvasRenderer from '../../Tools/CanvasRenderer.js';
 import KeyListener from '../../Tools/KeyListener.js';
@@ -30,7 +30,7 @@ export default abstract class Level extends Scene {
 
     this.player1SpawnCoördinates = { x: 0, y: 0 };
     const player1SpriteSheet: HTMLImageElement = new Image();
-    player1SpriteSheet.src = 'assets/tanksBasePlayer1TanksSpriteSheet.png';
+    player1SpriteSheet.src = 'assets/TankSprites/tanksBasePlayer1TanksSpriteSheet.png';
     this.player1 = new Player1(
       maxX,
       maxY,
@@ -41,8 +41,10 @@ export default abstract class Level extends Scene {
         width: 30,
         height: 28
       },
-      (Tanks.tileSize * this.player1SpawnCoördinates.x), //X Coordinate
-      (Tanks.tileSize * this.player1SpawnCoördinates.y), //Y Coordinate
+      this.player1SpawnCoördinates.x, //X Coordinate
+      this.player1SpawnCoördinates.y, //Y Coordinate
+      'Player1',
+      'Still',
     );
 
     this.levelComplete = false;
@@ -58,10 +60,7 @@ export default abstract class Level extends Scene {
     this.player1.setBarrelAngle(calcAngleX, calcAngleY);
 
     if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT) || keyListener.keyPressed(KeyListener.KEY_SPACE)) {
-      if (this.player1.getBulletsLeft() > 0) {
-        this.player1.changeBulletsLeft(-1);
-        this.objectArray.push(this.player1.getBulletType());
-      }
+      this.player1.shoot();
     }
 
     if (keyListener.isKeyDown(KeyListener.KEY_RIGHT) && keyListener.isKeyDown(KeyListener.KEY_UP)) {
@@ -90,10 +89,23 @@ export default abstract class Level extends Scene {
       object.update(elapsed);
       if (object instanceof BulletObject) {
         if (object.getShouldBeDestroyed()) {
-          if (object.getOwner() === 'Player1') {
+          if (object.getOwner() === 'Player1' || object.getOwner() === 'FreeFromPlayer1') {
+            console.log('increased');
             this.player1.changeBulletsLeft(1);
           }
           this.objectArray.splice(this.objectArray.indexOf(object), 1);
+        }
+        for (const checkObject of this.objectArray) {
+          if (checkObject instanceof TankObjects) {
+            if (object.getOwner() !== checkObject.getName()) {
+              if (object.isCollidingWithItem(checkObject)) {
+                console.log(object.getName() + ' collided with: ' + checkObject.getName());
+
+                object.setShouldBeDestroyed(true);
+                checkObject.setShouldBeDestroyed(true);
+              }
+            }
+          }
         }
       }
       if (object instanceof TankObjects) {
@@ -102,6 +114,10 @@ export default abstract class Level extends Scene {
         }
       }
     }
+  }
+
+  public addToObjectArray(object: CanvasItem): void {
+    this.objectArray.push(object);
   }
 
   /**
