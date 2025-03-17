@@ -1,6 +1,8 @@
+import Level from '../../Scenes/Levels/Level.js';
 import Tanks from '../../Tanks.js';
 import CanvasRenderer from '../../Tools/CanvasRenderer.js';
 import { Sprite } from '../../Types.js';
+import BulletObject from '../BulletTypes/BulletObject.js';
 import CanvasItem from '../CanvasItem.js';
 
 export default abstract class TankObjects extends CanvasItem {
@@ -31,7 +33,9 @@ export default abstract class TankObjects extends CanvasItem {
   public constructor(maxX: number, maxY: number,
     sprite: Sprite,
     posX: number,
-    posY: number) {
+    posY: number,
+    name: string,
+    facing: string) {
     super(maxX, maxY);
 
     this.tankBase = sprite;
@@ -39,13 +43,31 @@ export default abstract class TankObjects extends CanvasItem {
     this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
     this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5)) * Tanks.resizeFactor;
     this.barrelAngle = 0;
-    this.position = { x: posX, y: posY };
+    this.position = { x: posX * Tanks.tileSize, y: posY * Tanks.tileSize };
     this.width = sprite.width;
     this.height = sprite.height;
     this.speed = 0;
     this.bulletsLeft = 0;
     this.currentMovementDirection = 'Still';
     this.lastMovementDirection = 'Still';
+    if (facing === 'Right') {
+      this.barrelAngle = 0;
+    } else if (facing === 'Left') {
+      this.barrelAngle = Math.PI;
+    } else if (facing === 'Up') {
+      this.barrelAngle = -Math.PI / 2;
+    } else if (facing === 'Down') {
+      this.barrelAngle = Math.PI / 2;
+    } else if (facing === 'RightUp') {
+      this.barrelAngle = -Math.PI / 4;
+    } else if (facing === 'RightDown') {
+      this.barrelAngle = Math.PI / 4;
+    } else if (facing === 'LeftUp') {
+      this.barrelAngle = 3 * (-Math.PI / 4);
+    } else if (facing === 'LeftDown') {
+      this.barrelAngle = 3 * (Math.PI / 4);
+    }
+
     this.shouldBeDestroyed = false;
   }
 
@@ -124,6 +146,8 @@ export default abstract class TankObjects extends CanvasItem {
     };
   }
 
+  public abstract shoot(): void;
+
   /**
 * Draw itself on the given context
 * @param ctx the 2D rendering context of the canvas
@@ -191,6 +215,10 @@ export default abstract class TankObjects extends CanvasItem {
     this.position.y = Tanks.tileSize * row;
   }
 
+  public setShouldBeDestroyed(boolean: boolean): void {
+    this.shouldBeDestroyed = boolean;
+  }
+
   public override getWidth(): number {
     return this.width;
   }
@@ -210,6 +238,8 @@ export default abstract class TankObjects extends CanvasItem {
   public getBulletsLeft(): number {
     return this.bulletsLeft;
   }
+
+  public abstract getBulletType(): BulletObject;
 
   public getShouldBeDestroyed(): boolean {
     return this.shouldBeDestroyed;

@@ -61,6 +61,10 @@ export default abstract class BulletObject extends CanvasItem {
     CanvasRenderer.drawRotatedImage(canvas, this.image, this.position.x, this.position.y, this.image.width * Tanks.resizeFactor, this.image.height * Tanks.resizeFactor, this.angle);
   }
 
+  public setShouldBeDestroyed(boolean: boolean): void {
+    this.shouldBeDestroyed = boolean;
+  }
+
   public getOwner(): string {
     return this.owner;
   }
@@ -74,6 +78,12 @@ export default abstract class BulletObject extends CanvasItem {
       this.shouldBeDestroyed = true;
       return false;
     } else {
+      if (this.owner === 'Player1') {
+        this.owner = 'FreeFromPlayer1';
+      }
+      if (this.owner === 'Player2') {
+        this.owner = 'FreeFromPlayer2';
+      }
       this.bouncesLeft -= 1;
       return true;
     }
