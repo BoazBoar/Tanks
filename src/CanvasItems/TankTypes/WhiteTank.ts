@@ -14,7 +14,6 @@ export default class WhiteTank extends TankObjects {
     super(maxX, maxY, sprite, posX, posY, name, facing);
 
     this.tankBarrel = CanvasRenderer.loadNewImage('assets/TankSprites/tanksWhiteTankBarrel.png');
-    this.name = name;
     this.speed = 0;
     this.bulletsLeft = 0;
     this.currentMovementDirection = facing;
