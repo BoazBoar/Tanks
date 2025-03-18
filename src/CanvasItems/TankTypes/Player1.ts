@@ -16,7 +16,6 @@ export default class Player1 extends TankObjects {
     super(maxX, maxY, sprite, posX, posY, name, facing);
 
     this.tankBarrel = CanvasRenderer.loadNewImage('assets/TankSprites/tanksPlayer1.png');
-    this.name = 'Player1';
     this.speed = 0.07;
     this.bulletsLeft = 9;
   }
@@ -26,10 +25,12 @@ export default class Player1 extends TankObjects {
   }
 
   public shoot(): void {
-    if (this.bulletsLeft > 0) {
-      this.changeBulletsLeft(-1);
-      if (Tanks.currentScene instanceof Level) {
-        Tanks.currentScene.addToObjectArray(this.getBulletType());
+    if (!this.shouldBeDestroyed) {
+      if (this.bulletsLeft > 0) {
+        this.changeBulletsLeft(-1);
+        if (Tanks.currentScene instanceof Level) {
+          Tanks.currentScene.addToObjectArray(this.getBulletType());
+        }
       }
     }
   }

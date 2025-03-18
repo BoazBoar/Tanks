@@ -1,3 +1,4 @@
+import WhiteTank from '../../CanvasItems/TankTypes/WhiteTank.js';
 import Tanks from '../../Tanks.js';
 import Level from './Level.js';
 
@@ -46,6 +47,25 @@ export default class Level1 extends Level {
   public spawnTanks(): void {
     this.player1.setSpawnPoint(this.player1SpawnCoördinates.x, this.player1SpawnCoördinates.y);
 
-    this.objectArray.push(this.player1);
+    // TODO: Change to Enemy Brown Tank
+    const whiteTankSpriteSheet: HTMLImageElement = new Image();
+    whiteTankSpriteSheet.src = 'assets/TankSprites/tanksWhiteTankSpriteSheet.png';
+    const whiteTank1: WhiteTank = new WhiteTank(
+      this.maxX,
+      this.maxY,
+      {
+        image: whiteTankSpriteSheet,
+        x: 0,
+        y: 0,
+        width: 30,
+        height: 28
+      },
+      3,
+      8,
+      'WhiteTank1',
+      'Right');
+
+    this.objectArray.push(this.player1, whiteTank1);
+    this.numberOfEnemyTanks = 1;
   }
 }
