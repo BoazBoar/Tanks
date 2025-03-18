@@ -109,5 +109,6 @@ export default class Level0 extends Level {
       'Up');
 
     this.objectArray.push(this.player1, whiteTank1, whiteTank2, whiteTank3, whiteTank4);
+    this.numberOfEnemyTanks = 4;
   }
 }

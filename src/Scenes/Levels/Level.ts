@@ -18,6 +18,8 @@ export default abstract class Level extends Scene {
 
   protected player1: Player1;
 
+  protected numberOfEnemyTanks: number;
+
   protected levelComplete: boolean;
 
   public constructor(maxX: number, maxY: number) {
@@ -47,6 +49,7 @@ export default abstract class Level extends Scene {
       'Still',
     );
 
+    this.numberOfEnemyTanks = 0;
     this.levelComplete = false;
   }
 
@@ -90,7 +93,6 @@ export default abstract class Level extends Scene {
       if (object instanceof BulletObject) {
         if (object.getShouldBeDestroyed()) {
           if (object.getOwner() === 'Player1' || object.getOwner() === 'FreeFromPlayer1') {
-            console.log('increased');
             this.player1.changeBulletsLeft(1);
           }
           this.objectArray.splice(this.objectArray.indexOf(object), 1);
@@ -102,6 +104,12 @@ export default abstract class Level extends Scene {
                 console.log(object.getName() + ' collided with: ' + checkObject.getName());
 
                 object.setShouldBeDestroyed(true);
+
+                if (!(checkObject instanceof Player1)) {
+                  if (Tanks.currentScene instanceof Level) {
+                    Tanks.currentScene.changeNumberOfEnemyTanks(-1);
+                  }
+                }
                 checkObject.setShouldBeDestroyed(true);
               }
             }
@@ -114,10 +122,18 @@ export default abstract class Level extends Scene {
         }
       }
     }
+
+    if (this.numberOfEnemyTanks <= 0) {
+      this.levelComplete = true;
+    }
   }
 
   public addToObjectArray(object: CanvasItem): void {
     this.objectArray.push(object);
+  }
+
+  public changeNumberOfEnemyTanks(change: number): void {
+    this.numberOfEnemyTanks += change;
   }
 
   /**
