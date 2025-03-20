@@ -1,5 +1,7 @@
 import WhiteTank from '../../CanvasItems/TankTypes/WhiteTank.js';
 import Tanks from '../../Tanks.js';
+import Scene from '../Scene.js';
+import SelectLevel from '../SelectLevel.js';
 import Level from './Level.js';
 
 export default class Level1 extends Level {
@@ -67,5 +69,12 @@ export default class Level1 extends Level {
 
     this.objectArray.push(this.player1, whiteTank1);
     this.numberOfEnemyTanks = 1;
+  }
+
+  public override getNextScene(): Scene | null {
+    if (this.levelEnded) {
+      return new SelectLevel(this.maxX, this.maxY, 0);
+    }
+    return null;
   }
 }
