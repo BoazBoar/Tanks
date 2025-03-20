@@ -56,10 +56,8 @@ export default abstract class Level extends Scene {
   public abstract spawnTanks(): void;
 
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
-    this.cursor.setPosition({ x: mouseListener.getMousePosition().x, y: mouseListener.getMousePosition().y });
-
-    const calcAngleX: number = mouseListener.getMousePosition().x - ((this.player1.getPosX() + (this.player1.getBarrelWidth() / 2)) * Tanks.resizeFactor);
-    const calcAngleY: number = mouseListener.getMousePosition().y - ((this.player1.getPosY() + (this.player1.getBarrelHeight() / 2)) * Tanks.resizeFactor);
+    const calcAngleX: number = mouseListener.getMousePosition().x - ((this.player1.getPosX() + (this.player1.getBarrelWidth() / 2)));
+    const calcAngleY: number = mouseListener.getMousePosition().y - ((this.player1.getPosY() + (this.player1.getBarrelHeight() / 2)));
     this.player1.setBarrelAngle(calcAngleX, calcAngleY);
 
     if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT) || keyListener.keyPressed(KeyListener.KEY_SPACE)) {
@@ -177,9 +175,6 @@ export default abstract class Level extends Scene {
       ctx = context;
     }
     // this.drawCollisionMap(ctx);
-
-    // Always render the cursor on top of everything else
-    this.cursor.render(canvas);
   }
 
   /**
@@ -193,10 +188,10 @@ export default abstract class Level extends Scene {
         if (this.checkCollision(col, row) === true) {
           ctx.fillStyle = 'red';
           ctx.fillRect(
-            (col * Tanks.tileSize) * Tanks.resizeFactor,
-            (row * Tanks.tileSize) * Tanks.resizeFactor,
-            Tanks.tileSize * Tanks.resizeFactor,
-            Tanks.tileSize * Tanks.resizeFactor
+            (col * Tanks.tileSize),
+            (row * Tanks.tileSize),
+            Tanks.tileSize,
+            Tanks.tileSize
           );
         }
       }

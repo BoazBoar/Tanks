@@ -28,32 +28,32 @@ export default class Tanks extends Game {
 
   public maxY: number;
 
-  public static resizeFactor: number;
-
   public constructor(canvas: HTMLCanvasElement) {
     super();
 
     this.canvas = canvas;
-    if (window.innerHeight >= window.innerWidth) {
-      this.canvas.height = window.innerWidth;
-      this.canvas.width = window.innerWidth;
-    } else {
-      this.canvas.height = window.innerHeight;
-      this.canvas.width = window.innerHeight;
-    }
-    if (this.canvas.width > Tanks.cols * Tanks.tileSize) {
-      this.canvas.width = Tanks.rows * Tanks.tileSize;
-    }
-    if (this.canvas.height > Tanks.rows * Tanks.tileSize) {
-      this.canvas.height = Tanks.cols * Tanks.tileSize;
-    }
+    // if (window.innerHeight >= window.innerWidth) {
+    //   this.canvas.height = window.innerWidth;
+    //   this.canvas.width = window.innerWidth;
+    // } else {
+    //   this.canvas.height = window.innerHeight;
+    //   this.canvas.width = window.innerHeight;
+    // }
+    // if (this.canvas.width > Tanks.cols * Tanks.tileSize) {
+    //   this.canvas.width = Tanks.rows * Tanks.tileSize;
+    // }
+    // if (this.canvas.height > Tanks.rows * Tanks.tileSize) {
+    //   this.canvas.height = Tanks.cols * Tanks.tileSize;
+    // }
+
+    this.canvas.width = 768;
+    this.canvas.height = 768;
 
     this.keyListener = new KeyListener;
     this.mouseListener = new MouseListener(this.canvas);
 
     this.maxX = this.canvas.width;
     this.maxY = this.canvas.height;
-    Tanks.resizeFactor = this.maxX / 768;
 
     Tanks.currentScene = new Menu(this.maxX, this.maxY);
 

@@ -1,7 +1,7 @@
 import Level from '../../Scenes/Levels/Level.js';
 import Tanks from '../../Tanks.js';
 import CanvasRenderer from '../../Tools/CanvasRenderer.js';
-import { Sprite } from '../../Types.js';
+import { Sprite, Vector2 } from '../../Types.js';
 import BulletObject from '../BulletTypes/BulletObject.js';
 import CanvasItem from '../CanvasItem.js';
 import Player1 from './Player1.js';
@@ -16,6 +16,8 @@ export default abstract class TankObjects extends CanvasItem {
   protected tankBarrelRelativeY: number;
 
   protected barrelAngle: number;
+
+  protected bulletSpawnPoint: Vector2;
 
   protected width: number;
 
@@ -41,9 +43,10 @@ export default abstract class TankObjects extends CanvasItem {
 
     this.tankBase = sprite;
     this.tankBarrel = CanvasRenderer.loadNewImage('');
-    this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
-    this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5)) * Tanks.resizeFactor;
+    this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
+    this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5));
     this.barrelAngle = 0;
+    this.bulletSpawnPoint = { x: (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)), y: (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5)) };
     this.position = { x: posX * Tanks.tileSize, y: posY * Tanks.tileSize };
     this.width = sprite.width;
     this.height = sprite.height;
@@ -96,8 +99,8 @@ export default abstract class TankObjects extends CanvasItem {
         this.lastMovementDirection = this.currentMovementDirection;
       }
 
-      this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
-      this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5)) * Tanks.resizeFactor;
+      this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
+      this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5));
 
       this.changeSprite();
     }
@@ -171,40 +174,40 @@ export default abstract class TankObjects extends CanvasItem {
         this.tankBase.y * this.tankBase.height,
         this.tankBase.width,
         this.tankBase.height,
-        (this.position.x) * Tanks.resizeFactor,
-        (this.position.y) * Tanks.resizeFactor,
-        this.width * Tanks.resizeFactor,
-        this.height * Tanks.resizeFactor
+        (this.position.x),
+        (this.position.y),
+        this.width,
+        this.height
       );
 
       // if (this.lastMovementDirection === 'Right') {
-      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (10)) * Tanks.resizeFactor;
+      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (10));
       // } else if (this.lastMovementDirection === 'Left') {
-      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (10)) * Tanks.resizeFactor;
+      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (10));
       // } else if (this.lastMovementDirection === 'Up') {
-      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
-      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 3)) * Tanks.resizeFactor;
+      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
+      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 3));
       // } else if (this.lastMovementDirection === 'Down') {
-      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
-      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
+      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2));
       // } else if (this.lastMovementDirection === 'RightUp') {
-      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
-      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
+      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2));
       // } else if (this.lastMovementDirection === 'RightDown') {
-      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
-      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
+      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2));
       // } else if (this.lastMovementDirection === 'LeftUp') {
-      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
-      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
+      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2));
       // } else if (this.lastMovementDirection === 'LeftDown') {
-      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)) * Tanks.resizeFactor;
-      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2)) * Tanks.resizeFactor;
+      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
+      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2));
       // } else {
-      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 1.5)) * Tanks.resizeFactor;
-      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 3)) * Tanks.resizeFactor;
+      //   this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 1.5));
+      //   this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 3));
       // }
 
-      CanvasRenderer.drawRotatedImage(canvas, this.tankBarrel, this.tankBarrelRelativeX, this.tankBarrelRelativeY, this.tankBarrel.width * Tanks.resizeFactor, this.tankBarrel.height * Tanks.resizeFactor, this.barrelAngle);
+      CanvasRenderer.drawRotatedImage(canvas, this.tankBarrel, this.tankBarrelRelativeX, this.tankBarrelRelativeY, this.tankBarrel.width, this.tankBarrel.height, this.barrelAngle);
     }
   }
 

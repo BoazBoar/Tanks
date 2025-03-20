@@ -60,10 +60,10 @@ export default class Level1 extends Level {
         width: 30,
         height: 28
       },
-      3,
-      8,
+      18,
+      14,
       'WhiteTank1',
-      'Right');
+      'Left');
 
     this.objectArray.push(this.player1, whiteTank1);
     this.numberOfEnemyTanks = 1;

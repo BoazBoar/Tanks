@@ -5,6 +5,7 @@ import CanvasRenderer from '../Tools/CanvasRenderer.js';
 import CollisionBox from '../CanvasItems/CollisionBox.js';
 import SelectLevel from './SelectLevel.js';
 import Tanks from '../Tanks.js';
+import { Vector2 } from '../Types.js';
 
 export default class Menu extends Scene {
   private startNewGame: boolean;
@@ -48,15 +49,13 @@ export default class Menu extends Scene {
    * @param MouseListener mouseListener
    */
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
-    // this.cursor.setPosition(mouseListener.getMousePosition());
-    this.cursor.setPosition({ x: mouseListener.getMousePosition().x, y: mouseListener.getMousePosition().y });
-
     if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
       const xDivider: number = this.maxX / Tanks.rows;
       const yDivider: number = this.maxY / Tanks.cols;
 
       const mouseRowOnGrid: number = Math.floor(mouseListener.getMousePosition().x / xDivider);
       const mouseColOnGrid: number = Math.floor(mouseListener.getMousePosition().y / yDivider);
+
       this.checkCollision(mouseRowOnGrid, mouseColOnGrid);
     }
   }
@@ -91,7 +90,7 @@ export default class Menu extends Scene {
    */
   public override getNextScene(): Scene | null {
     if (this.startNewGame === true) {
-      return new SelectLevel(this.maxX, this.maxY);
+      return new SelectLevel(this.maxX, this.maxY, 0);
     }
     return null;
   }
@@ -102,8 +101,5 @@ export default class Menu extends Scene {
    */
   public override render(canvas: HTMLCanvasElement): void {
     CanvasRenderer.drawResizedImage(canvas, this.bgImage, 0, 0, this.maxX, this.maxY);
-
-    // Always render the cursor on top of everything else
-    this.cursor.render(canvas);
   }
 }
