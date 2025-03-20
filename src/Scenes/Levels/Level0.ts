@@ -15,6 +15,7 @@ export default class Level0 extends Level {
 
     if (Tanks.multiplayer) {
       this.player1SpawnCoördinates = { x: 3, y: 17 };
+      this.player2SpawnCoördinates = { x: 5, y: 19 };
     } else {
       this.player1SpawnCoördinates = { x: 4, y: 18 };
     }
@@ -116,8 +117,13 @@ export default class Level0 extends Level {
   }
 
   public override getNextScene(): Scene | null {
-    if (this.levelEnded) {
+    if (this.levelState === 'Ended' || this.levelState === 'Aborted') {
+      if (Tanks.levelReached <= 0 && this.levelState === 'Ended') {
+        Tanks.levelReached = 1;
+      }
       return new SelectLevel(this.maxX, this.maxY, 0);
+    } else if (this.levelState === 'Restart') {
+      return new Level0(this.maxX, this.maxY);
     }
     return null;
   }

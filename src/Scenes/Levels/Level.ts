@@ -1,5 +1,6 @@
 import BulletObject from '../../CanvasItems/BulletTypes/BulletObject.js';
 import CanvasItem from '../../CanvasItems/CanvasItem.js';
+import CollisionBox from '../../CanvasItems/CollisionBox.js';
 import Player1 from '../../CanvasItems/TankTypes/Player1.js';
 import TankObjects from '../../CanvasItems/TankTypes/TankObjects.js';
 import Tanks from '../../Tanks.js';
@@ -18,15 +19,21 @@ export default abstract class Level extends Scene {
 
   protected resultsScreen: HTMLImageElement;
 
+  protected defeatScreen: HTMLImageElement;
+
+  protected leaveButton: CanvasItem;
+
+  protected againButton: CanvasItem;
+
   protected player1SpawnCoördinates: Vector2;
 
   protected player1: Player1;
 
+  protected player2SpawnCoördinates: Vector2;
+
   protected numberOfEnemyTanks: number;
 
-  protected levelComplete: boolean;
-
-  protected levelEnded: boolean;
+  protected levelState: string;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -38,7 +45,11 @@ export default abstract class Level extends Scene {
     this.levelTitle = new Image();
     this.levelTitle.src = '';
     this.resultsScreen = new Image();
-    this.resultsScreen.src = 'assets/tanksVictoryResultsScreen.png';
+    this.resultsScreen.src = 'assets/ResultScreens/tanksVictoryResultsScreen.png';
+    this.defeatScreen = new Image();
+    this.defeatScreen.src = 'assets/ResultScreens/tanksDefeatScreen.png';
+    this.leaveButton = new CollisionBox(maxX, maxY, (this.maxX / 2.67), (this.maxY / 1.848), 176, 64, 'assets/ResultScreens/tanksLeaveButton.png');
+    this.againButton = new CollisionBox(maxX, maxY, (this.maxX / 1.6), (this.maxY / 1.848), 176, 64, 'assets/ResultScreens/tanksAgainButton.png');
 
     this.player1SpawnCoördinates = { x: 0, y: 0 };
     const player1SpriteSheet: HTMLImageElement = new Image();
@@ -59,15 +70,18 @@ export default abstract class Level extends Scene {
       'Still',
     );
 
+    this.player2SpawnCoördinates = { x: 0, y: 0 };
+    // TODO: Player 2 here
+
     this.numberOfEnemyTanks = 0;
-    this.levelComplete = false;
-    this.levelEnded = false;
+    // Ongoing = run as normal, Complete = show results screen, Ended = go to levelselect with succes, Failed = show defeat screen, Aborted = go to levelselect with failure, Restart = replay the level
+    this.levelState = 'Ongoing';
   }
 
   public abstract spawnTanks(): void;
 
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
-    if (!this.levelComplete) {
+    if (this.levelState === 'Ongoing') {
       const calcAngleX: number = mouseListener.getMousePosition().x - ((this.player1.getPosX() + (this.player1.getBarrelWidth() / 2)));
       const calcAngleY: number = mouseListener.getMousePosition().y - ((this.player1.getPosY() + (this.player1.getBarrelHeight() / 2)));
       this.player1.setBarrelAngle(calcAngleX, calcAngleY);
@@ -95,24 +109,26 @@ export default abstract class Level extends Scene {
       } else {
         this.player1.setMovementDirection('Still');
       }
-    } else if (this.levelComplete) {
+    } else if (this.levelState === 'Complete') {
       if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
-        this.levelEnded = true;
+        this.levelState = 'Ended';
+      }
+    } else if (this.levelState === 'Failed') {
+      if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
+        if (this.leaveButton.isCollidingWithCursor(mouseListener)) {
+          this.levelState = 'Aborted';
+        } else if (this.againButton.isCollidingWithCursor(mouseListener)) {
+          this.levelState = 'Restart';
+        }
       }
     }
   }
 
   public override update(elapsed: number): void {
-    if (!this.levelComplete) {
+    if (this.levelState === 'Ongoing') {
       for (const object of this.objectArray) {
         object.update(elapsed);
         if (object instanceof BulletObject) {
-          if (object.getShouldBeDestroyed()) {
-            if (object.getOwner() === 'Player1' || object.getOwner() === 'FreeFromPlayer1') {
-              this.player1.changeBulletsLeft(1);
-            }
-            this.objectArray.splice(this.objectArray.indexOf(object), 1);
-          }
           for (const checkObject of this.objectArray) {
             if (checkObject instanceof TankObjects) {
               if (object.getOwner() !== checkObject.getName()) {
@@ -121,6 +137,7 @@ export default abstract class Level extends Scene {
 
                   object.setShouldBeDestroyed(true);
 
+                  // TODO implement check for player2
                   if (!(checkObject instanceof Player1)) {
                     if (Tanks.currentScene instanceof Level) {
                       Tanks.currentScene.changeNumberOfEnemyTanks(-1);
@@ -131,6 +148,12 @@ export default abstract class Level extends Scene {
               }
             }
           }
+          if (object.getShouldBeDestroyed()) {
+            if (object.getOwner() === 'Player1' || object.getOwner() === 'FreeFromPlayer1') {
+              this.player1.changeBulletsLeft(1);
+            }
+            this.objectArray.splice(this.objectArray.indexOf(object), 1);
+          }
         }
         if (object instanceof TankObjects) {
           if (object.getShouldBeDestroyed()) {
@@ -140,7 +163,10 @@ export default abstract class Level extends Scene {
       }
 
       if (this.numberOfEnemyTanks <= 0) {
-        this.levelComplete = true;
+        this.levelState = 'Complete';
+      }
+      if (this.player1.getShouldBeDestroyed()) {
+        this.levelState = 'Failed';
       }
     }
   }
@@ -193,9 +219,14 @@ export default abstract class Level extends Scene {
 
     // Victory screen should be drawn on top of everything
     // 3.76 used by the level title was determined by eye, not sure how to calculate otherwise
-    if (this.levelComplete) {
+    if (this.levelState === 'Complete') {
       CanvasRenderer.drawImage(canvas, this.resultsScreen, (this.maxX / 2) - (this.resultsScreen.width / 2), (this.maxY / 2) - (this.resultsScreen.height / 2));
       CanvasRenderer.drawImage(canvas, this.levelTitle, (this.maxX / 2) - (this.levelTitle.width / 2), (this.maxY / 3.76) - (this.levelTitle.height / 2));
+    }
+    if (this.levelState === 'Failed') {
+      CanvasRenderer.drawImage(canvas, this.defeatScreen, (this.maxX / 2) - (this.defeatScreen.width / 2), (this.maxY / 2) - (this.defeatScreen.height / 2));
+      this.againButton.render(canvas);
+      this.leaveButton.render(canvas);
     }
   }
 
