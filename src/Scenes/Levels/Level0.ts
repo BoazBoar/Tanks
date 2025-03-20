@@ -1,6 +1,8 @@
 import TankObjects from '../../CanvasItems/TankTypes/TankObjects.js';
 import WhiteTank from '../../CanvasItems/TankTypes/WhiteTank.js';
 import Tanks from '../../Tanks.js';
+import Scene from '../Scene.js';
+import SelectLevel from '../SelectLevel.js';
 import Level from './Level.js';
 
 export default class Level0 extends Level {
@@ -9,9 +11,11 @@ export default class Level0 extends Level {
 
     this.levelMapBackground.src = 'assets/LevelBackgrounds/tanksWorld0Level0Background.png';
     this.levelMapForeground.src = 'assets/LevelForegrounds/tanksWorld0Level0Foreground.png';
+    this.levelTitle.src = 'assets/LevelTitles/World0Level0Title.png';
 
     if (Tanks.multiplayer) {
       this.player1SpawnCoördinates = { x: 3, y: 17 };
+      this.player2SpawnCoördinates = { x: 5, y: 19 };
     } else {
       this.player1SpawnCoördinates = { x: 4, y: 18 };
     }
@@ -110,5 +114,17 @@ export default class Level0 extends Level {
 
     this.objectArray.push(this.player1, whiteTank1, whiteTank2, whiteTank3, whiteTank4);
     this.numberOfEnemyTanks = 4;
+  }
+
+  public override getNextScene(): Scene | null {
+    if (this.levelState === 'Ended' || this.levelState === 'Aborted') {
+      if (Tanks.levelReached <= 0 && this.levelState === 'Ended') {
+        Tanks.levelReached = 1;
+      }
+      return new SelectLevel(this.maxX, this.maxY, 0);
+    } else if (this.levelState === 'Restart') {
+      return new Level0(this.maxX, this.maxY);
+    }
+    return null;
   }
 }

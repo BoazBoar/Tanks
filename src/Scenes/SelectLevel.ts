@@ -70,7 +70,8 @@ export default class SelectLevel extends Scene {
       if (this.collisionArray[Tanks.cols * row + col] === checkerNumber) {
         if (checkerNumber - 200 >= 0) {
           this.screenNumber = (checkerNumber - 200);
-        } else if (checkerNumber - 100 >= 0) {
+        } else if (checkerNumber - 100 >= 0 && checkerNumber - 100 <= Tanks.levelReached) {
+          console.log(checkerNumber - 100 <= Tanks.levelReached);
           this.levelNumber = checkerNumber - 100;
         }
       }
