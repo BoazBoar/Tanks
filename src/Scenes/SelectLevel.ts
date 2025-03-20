@@ -3,6 +3,7 @@ import Tanks from '../Tanks.js';
 import CanvasRenderer from '../Tools/CanvasRenderer.js';
 import KeyListener from '../Tools/KeyListener.js';
 import MouseListener from '../Tools/MouseListener.js';
+import { Vector2 } from '../Types.js';
 import Level0 from './Levels/Level0.js';
 import Level1 from './Levels/Level1.js';
 import Scene from './Scene.js';
@@ -12,7 +13,7 @@ export default class SelectLevel extends Scene {
 
   protected levelNumber: number;
 
-  public constructor(maxX: number, maxY: number) {
+  public constructor(maxX: number, maxY: number, screenNumber: number) {
     super(maxX, maxY);
 
     this.bgImage.src = 'assets/LevelSelection/tanskLevelSelectionTutorial.png';
@@ -42,13 +43,14 @@ export default class SelectLevel extends Scene {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    this.screenNumber = -1;
+    this.screenNumber = screenNumber;
     this.levelNumber = -1;
+    if (this.screenNumber != -1) {
+      this.moveToScreen(screenNumber);
+    }
   }
 
   public override processInput(keyListener: KeyListener, mouseListener: MouseListener): void {
-    this.cursor.setPosition({ x: mouseListener.getMousePosition().x, y: mouseListener.getMousePosition().y });
-
     if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
       const xDivider: number = this.maxX / Tanks.rows;
       const yDivider: number = this.maxY / Tanks.cols;
@@ -64,18 +66,17 @@ export default class SelectLevel extends Scene {
   }
 
   public override checkCollision(col: number, row: number): boolean {
-    let nextScreenNumber: number = -1;
     for (let checkerNumber: number = 0; checkerNumber < 210; checkerNumber++) {
       if (this.collisionArray[Tanks.cols * row + col] === checkerNumber) {
         if (checkerNumber - 200 >= 0) {
-          nextScreenNumber = (checkerNumber - 200);
+          this.screenNumber = (checkerNumber - 200);
         } else if (checkerNumber - 100 >= 0) {
           this.levelNumber = checkerNumber - 100;
         }
       }
     }
-    if (nextScreenNumber != -1) {
-      this.moveToScreen(nextScreenNumber);
+    if (this.screenNumber != -1) {
+      this.moveToScreen(this.screenNumber);
     }
     return false;
   }
@@ -92,9 +93,6 @@ export default class SelectLevel extends Scene {
 
   public override render(canvas: HTMLCanvasElement): void {
     CanvasRenderer.drawResizedImage(canvas, this.bgImage, 0, 0, this.maxX, this.maxY);
-
-    // Always render the cursor on top of everything else
-    this.cursor.render(canvas);
   }
 
   public moveToScreen(screenNumber: number): void {
@@ -289,7 +287,7 @@ export default class SelectLevel extends Scene {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     } else {
-      throw new Error('invalid screen number');
+      throw new Error('SelectLevel.moveToScreen received invalid screen number: ' + this.screenNumber);
     }
   }
 }
