@@ -24,6 +24,8 @@ export default class Tanks extends Game {
 
   public static multiplayer: boolean;
 
+  public static levelReached: number;
+
   public maxX: number;
 
   public maxY: number;
@@ -58,6 +60,8 @@ export default class Tanks extends Game {
     Tanks.currentScene = new Menu(this.maxX, this.maxY);
 
     Tanks.multiplayer = false;
+
+    Tanks.levelReached = 0;
   }
 
   /**
