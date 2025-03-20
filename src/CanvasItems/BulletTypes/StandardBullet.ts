@@ -1,5 +1,6 @@
 import Tanks from '../../Tanks.js';
 import CanvasRenderer from '../../Tools/CanvasRenderer.js';
+import { Vector2 } from '../../Types.js';
 import BulletObject from './BulletObject.js';
 
 export default class StandardBullet extends BulletObject {
@@ -9,11 +10,15 @@ export default class StandardBullet extends BulletObject {
     this.image = CanvasRenderer.loadNewImage('assets/tanksStandardBullet.png');
 
     this.name = 'Standard';
-    this.speed = 0.2;
+    this.speed = 0.12;
     this.bouncesLeft = 2;
   }
 
   public override update(elapsed: number): void {
     this.changePosition(this.position.x + elapsed * this.speed * Math.cos(this.angle), this.position.y + elapsed * this.speed * Math.sin(this.angle));
+  }
+
+  public getImageSize(): Vector2 {
+    return { x: this.image.width, y: this.image.height };
   }
 }

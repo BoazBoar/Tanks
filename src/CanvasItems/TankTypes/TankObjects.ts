@@ -46,7 +46,7 @@ export default abstract class TankObjects extends CanvasItem {
     this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
     this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5));
     this.barrelAngle = 0;
-    this.bulletSpawnPoint = { x: (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)), y: 13 };
+    this.bulletSpawnPoint = { x: (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)), y: (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5)) };
     this.position = { x: posX * Tanks.tileSize, y: posY * Tanks.tileSize };
     this.width = sprite.width;
     this.height = sprite.height;
@@ -101,8 +101,6 @@ export default abstract class TankObjects extends CanvasItem {
 
       this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
       this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5));
-
-
 
       this.changeSprite();
     }
