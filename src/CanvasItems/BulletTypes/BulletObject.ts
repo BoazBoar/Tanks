@@ -25,10 +25,10 @@ export default abstract class BulletObject extends CanvasItem {
   }
 
   public changePosition(wantedX: number, wantedY: number): void {
-    if (Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.resizeFactor / Tanks.tileSize), Math.floor(this.position.y / Tanks.resizeFactor / Tanks.tileSize)) ||
-    Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor(this.position.y / Tanks.resizeFactor / Tanks.tileSize)) ||
-    Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.resizeFactor / Tanks.tileSize), Math.floor((this.position.y / Tanks.resizeFactor + this.image.height) / Tanks.tileSize)) ||
-    Tanks.currentScene.checkCollision(Math.floor((wantedX / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor((this.position.y / Tanks.resizeFactor + this.image.height) / Tanks.tileSize))) {
+    if (Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.tileSize), Math.floor(this.position.y / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor((wantedX + this.image.width) / Tanks.tileSize), Math.floor(this.position.y / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.tileSize), Math.floor((this.position.y + this.image.height) / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor((wantedX + this.image.width) / Tanks.tileSize), Math.floor((this.position.y + this.image.height) / Tanks.tileSize))) {
       if (this.allowedToBounce()) {
         this.switchAngle('X');
         this.position.x -= wantedX - this.position.x;
@@ -36,10 +36,10 @@ export default abstract class BulletObject extends CanvasItem {
     } else {
       this.position.x = wantedX;
     }
-    if (Tanks.currentScene.checkCollision(Math.floor(this.position.x / Tanks.resizeFactor / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize)) ||
-    Tanks.currentScene.checkCollision(Math.floor((this.position.x / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor(wantedY / Tanks.resizeFactor / Tanks.tileSize)) ||
-    Tanks.currentScene.checkCollision(Math.floor(this.position.x / Tanks.resizeFactor / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize)) ||
-    Tanks.currentScene.checkCollision(Math.floor((this.position.x / Tanks.resizeFactor + this.image.width) / Tanks.tileSize), Math.floor((wantedY / Tanks.resizeFactor + this.image.height) / Tanks.tileSize))) {
+    if (Tanks.currentScene.checkCollision(Math.floor(this.position.x / Tanks.tileSize), Math.floor(wantedY / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor((this.position.x + this.image.width) / Tanks.tileSize), Math.floor(wantedY / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor(this.position.x / Tanks.tileSize), Math.floor((wantedY + this.image.height) / Tanks.tileSize)) ||
+    Tanks.currentScene.checkCollision(Math.floor((this.position.x + this.image.width) / Tanks.tileSize), Math.floor((wantedY + this.image.height) / Tanks.tileSize))) {
       if (this.allowedToBounce()) {
         this.switchAngle('Y');
         this.position.y -= wantedY - this.position.y;
@@ -58,7 +58,7 @@ export default abstract class BulletObject extends CanvasItem {
   }
 
   public override render(canvas: HTMLCanvasElement): void {
-    CanvasRenderer.drawRotatedImage(canvas, this.image, this.position.x, this.position.y, this.image.width * Tanks.resizeFactor, this.image.height * Tanks.resizeFactor, this.angle);
+    CanvasRenderer.drawRotatedImage(canvas, this.image, this.position.x, this.position.y, this.image.width, this.image.height, this.angle);
   }
 
   public setShouldBeDestroyed(boolean: boolean): void {

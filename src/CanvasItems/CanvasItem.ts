@@ -34,10 +34,10 @@ export default abstract class CanvasItem {
    */
   public isCollidingWithItem(item: CanvasItem): boolean {
     // TODO: fix item collision
-    if (this.position.x * Tanks.resizeFactor < item.position.x + item.getWidth() * Tanks.resizeFactor &&
-      this.position.x * Tanks.resizeFactor + this.getWidth() > item.position.x * Tanks.resizeFactor &&
-      this.position.y * Tanks.resizeFactor < item.position.y + item.getHeight() * Tanks.resizeFactor &&
-      this.position.y * Tanks.resizeFactor + this.getHeight() > item.position.y * Tanks.resizeFactor) {
+    if (this.position.x < item.position.x + item.getWidth() &&
+      this.position.x + this.getWidth() > item.position.x &&
+      this.position.y < item.position.y + item.getHeight() &&
+      this.position.y + this.getHeight() > item.position.y) {
       return true;
     } else {
       return false;
@@ -75,7 +75,7 @@ export default abstract class CanvasItem {
    */
   public render(canvas: HTMLCanvasElement): void {
     // CanvasRenderer.drawImage(canvas, this.image, this.position.x - this.image.width / 2, this.position.y - this.image.height / 2);
-    CanvasRenderer.drawResizedImage(canvas, this.image, this.position.x - (this.image.width * Tanks.resizeFactor) / 2, this.position.y - (this.image.height * Tanks.resizeFactor) / 2, this.getWidth() * Tanks.resizeFactor, this.getHeight() * Tanks.resizeFactor);
+    CanvasRenderer.drawResizedImage(canvas, this.image, this.position.x - (this.image.width) / 2, this.position.y - (this.image.height) / 2, this.getWidth(), this.getHeight());
   }
 
   public getPosX(): number {

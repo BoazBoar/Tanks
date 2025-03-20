@@ -9,7 +9,7 @@ export default class StandardBullet extends BulletObject {
     this.image = CanvasRenderer.loadNewImage('assets/tanksStandardBullet.png');
 
     this.name = 'Standard';
-    this.speed = 0.2 * Tanks.resizeFactor;
+    this.speed = 0.2;
     this.bouncesLeft = 2;
   }
 
