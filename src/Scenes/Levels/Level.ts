@@ -96,8 +96,7 @@ export default abstract class Level extends Scene {
         this.player1.setMovementDirection('Still');
       }
     } else if (this.levelComplete) {
-      if (mouseListener.buttonPressed(MouseListener.BUTTON_RIGHT)) {
-        console.log('next!');
+      if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
         this.levelEnded = true;
       }
     }

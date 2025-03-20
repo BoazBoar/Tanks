@@ -73,7 +73,7 @@ export default class Level1 extends Level {
 
   public override getNextScene(): Scene | null {
     if (this.levelEnded) {
-      return new SelectLevel(this.maxX, this.maxY, 0);
+      return new SelectLevel(this.maxX, this.maxY, 1);
     }
     return null;
   }
