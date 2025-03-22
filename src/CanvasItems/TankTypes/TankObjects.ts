@@ -33,6 +33,8 @@ export default abstract class TankObjects extends CanvasItem {
 
   protected shouldBeDestroyed: boolean;
 
+  protected tanksDestroyed: number;
+
   public constructor(maxX: number, maxY: number,
     sprite: Sprite,
     posX: number,
@@ -74,26 +76,34 @@ export default abstract class TankObjects extends CanvasItem {
     }
 
     this.shouldBeDestroyed = false;
+    this.tanksDestroyed = 0;
   }
 
   public update(elapsed: number): void {
     if (!this.shouldBeDestroyed) {
+      const movementVector: number = elapsed * this.speed;
+      const vectorLength: number = Math.sqrt((movementVector * movementVector) + (movementVector * movementVector));
+      let normalizedVector: number = 0;
+      // console.log('vectorLength: ' + vectorLength);
+      if (vectorLength !== 0) {
+        normalizedVector = movementVector / vectorLength;
+      }
       if (this.currentMovementDirection === 'Right') {
-        this.changePosition(this.position.x + elapsed * this.speed, this.position.y);
+        this.changePosition(this.position.x + movementVector, this.position.y);
       } else if (this.currentMovementDirection === 'Left') {
-        this.changePosition(this.position.x - elapsed * this.speed, this.position.y);
+        this.changePosition(this.position.x - movementVector, this.position.y);
       } else if (this.currentMovementDirection === 'Up') {
-        this.changePosition(this.position.x, this.position.y - elapsed * this.speed);
+        this.changePosition(this.position.x, this.position.y - movementVector);
       } else if (this.currentMovementDirection === 'Down') {
-        this.changePosition(this.position.x, this.position.y + elapsed * this.speed);
+        this.changePosition(this.position.x, this.position.y + movementVector);
       } else if (this.currentMovementDirection === 'RightUp') {
-        this.changePosition(this.position.x + elapsed * this.speed, this.position.y - elapsed * this.speed);
+        this.changePosition(this.position.x + normalizedVector, this.position.y - normalizedVector);
       } else if (this.currentMovementDirection === 'RightDown') {
-        this.changePosition(this.position.x + elapsed * this.speed, this.position.y + elapsed * this.speed);
+        this.changePosition(this.position.x + normalizedVector, this.position.y + normalizedVector);
       } else if (this.currentMovementDirection === 'LeftUp') {
-        this.changePosition(this.position.x - elapsed * this.speed, this.position.y - elapsed * this.speed);
+        this.changePosition(this.position.x - normalizedVector, this.position.y - normalizedVector);
       } else if (this.currentMovementDirection === 'LeftDown') {
-        this.changePosition(this.position.x - elapsed * this.speed, this.position.y + elapsed * this.speed);
+        this.changePosition(this.position.x - normalizedVector, this.position.y + normalizedVector);
       }
       if (this.currentMovementDirection !== 'Still') {
         this.lastMovementDirection = this.currentMovementDirection;
@@ -123,6 +133,8 @@ export default abstract class TankObjects extends CanvasItem {
   }
 
   public changePosition(wantedX: number, wantedY: number): void {
+
+
     if (!Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.tileSize), Math.floor(wantedY / Tanks.tileSize)) &&
       !Tanks.currentScene.checkCollision(Math.floor((wantedX + this.tankBase.width) / Tanks.tileSize), Math.floor(wantedY / Tanks.tileSize)) &&
       !Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.tileSize), Math.floor((wantedY + this.tankBase.height) / Tanks.tileSize)) &&
@@ -176,8 +188,8 @@ export default abstract class TankObjects extends CanvasItem {
         this.tankBase.height,
         (this.position.x),
         (this.position.y),
-        this.width,
-        this.height
+        this.tankBase.width,
+        this.tankBase.height
       );
 
       // if (this.lastMovementDirection === 'Right') {
@@ -228,6 +240,10 @@ export default abstract class TankObjects extends CanvasItem {
     this.shouldBeDestroyed = boolean;
   }
 
+  public changeTanksDestroyed(change: number): void {
+    this.tanksDestroyed += change;
+  }
+
   public override getWidth(): number {
     return this.width;
   }
@@ -252,6 +268,10 @@ export default abstract class TankObjects extends CanvasItem {
 
   public getShouldBeDestroyed(): boolean {
     return this.shouldBeDestroyed;
+  }
+
+  public getTanksDestroyed(): number {
+    return this.tanksDestroyed;
   }
 
   /**
