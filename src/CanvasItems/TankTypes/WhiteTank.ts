@@ -20,11 +20,20 @@ export default class WhiteTank extends TankObjects {
     this.lastMovementDirection = facing;
   }
 
-  public override getBulletType(): BulletObject {
-    return new StandardBullet(this.maxX, this.maxY, this.tankBarrelRelativeX, this.tankBarrelRelativeY, this.barrelAngle, this.name);
+  public override update(elapsed: number): void {
+    if (!this.shouldBeDestroyed) {
+      this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
+      this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5));
+
+      this.changeSprite();
+    }
   }
 
-  public shoot(): void {
+  public override shoot(): void {
     // Not Allowed
+  }
+
+  public override getBulletType(): BulletObject {
+    return new StandardBullet(this.maxX, this.maxY, this.tankBarrelRelativeX, this.tankBarrelRelativeY, this.barrelAngle, this.name);
   }
 }
