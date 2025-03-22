@@ -33,6 +33,8 @@ export default abstract class Level extends Scene {
 
   protected numberOfEnemyTanks: number;
 
+  protected numberOfTanksDestroyed: number;
+
   protected levelState: string;
 
   public constructor(maxX: number, maxY: number) {
@@ -74,6 +76,8 @@ export default abstract class Level extends Scene {
     // TODO: Player 2 here
 
     this.numberOfEnemyTanks = 0;
+    this.numberOfTanksDestroyed = 0;
+
     // Ongoing = run as normal, Complete = show results screen, Ended = go to levelselect with succes, Failed = show defeat screen, Aborted = go to levelselect with failure, Restart = replay the level
     this.levelState = 'Ongoing';
   }
@@ -131,7 +135,7 @@ export default abstract class Level extends Scene {
         if (object instanceof BulletObject) {
           for (const checkObject of this.objectArray) {
             if (checkObject instanceof TankObjects) {
-              if (object.getOwner() !== checkObject.getName()) {
+              if (object.getOwner() !== checkObject.getName() || object.getGracePeriod() <= 0) {
                 if (object.isCollidingWithItem(checkObject)) {
                   console.log(object.getName() + ' collided with: ' + checkObject.getName());
 
