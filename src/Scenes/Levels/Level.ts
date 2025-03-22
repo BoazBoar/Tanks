@@ -129,26 +129,33 @@ export default abstract class Level extends Scene {
   }
 
   public override update(elapsed: number): void {
+    // Only if the level is still being played
     if (this.levelState === 'Ongoing') {
       for (const object of this.objectArray) {
         object.update(elapsed);
+        // For every bullet inside the objectArray
         if (object instanceof BulletObject) {
           for (const checkObject of this.objectArray) {
-            if (checkObject instanceof TankObjects) {
-              if (object.getOwner() !== checkObject.getName() || object.getGracePeriod() <= 0) {
-                if (object.isCollidingWithItem(checkObject)) {
+            if (object.isCollidingWithItem(checkObject)) {
+              // If a bullet collides with a tank
+              if (checkObject instanceof TankObjects) {
+                if (object.getOwner() !== checkObject.getName() || object.getGracePeriod() <= 0) {
                   console.log(object.getName() + ' collided with: ' + checkObject.getName());
-
-                  object.setShouldBeDestroyed(true);
-
                   // TODO implement check for player2
                   if (!(checkObject instanceof Player1)) {
                     if (Tanks.currentScene instanceof Level) {
                       Tanks.currentScene.changeNumberOfEnemyTanks(-1);
                     }
                   }
+                  // Destroy both the bullet and the tank
+                  object.setShouldBeDestroyed(true);
                   checkObject.setShouldBeDestroyed(true);
                 }
+                // If a bullet collides with a different bullet
+              } else if (checkObject instanceof BulletObject && object !== checkObject) {
+                console.log(object.getName() + ' collided with: ' + checkObject.getName());
+                object.setShouldBeDestroyed(true);
+                checkObject.setShouldBeDestroyed(true);
               }
             }
           }
@@ -159,6 +166,7 @@ export default abstract class Level extends Scene {
             this.objectArray.splice(this.objectArray.indexOf(object), 1);
           }
         }
+        // For every tank inside the objectArray
         if (object instanceof TankObjects) {
           if (object.getShouldBeDestroyed()) {
             this.objectArray.splice(this.objectArray.indexOf(object), 1);

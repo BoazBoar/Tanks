@@ -84,7 +84,6 @@ export default abstract class TankObjects extends CanvasItem {
       const movementVector: number = elapsed * this.speed;
       const vectorLength: number = Math.sqrt((movementVector * movementVector) + (movementVector * movementVector));
       let normalizedVector: number = 0;
-      // console.log('vectorLength: ' + vectorLength);
       if (vectorLength !== 0) {
         normalizedVector = movementVector / vectorLength;
       }
@@ -133,8 +132,6 @@ export default abstract class TankObjects extends CanvasItem {
   }
 
   public changePosition(wantedX: number, wantedY: number): void {
-
-
     if (!Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.tileSize), Math.floor(wantedY / Tanks.tileSize)) &&
       !Tanks.currentScene.checkCollision(Math.floor((wantedX + this.tankBase.width) / Tanks.tileSize), Math.floor(wantedY / Tanks.tileSize)) &&
       !Tanks.currentScene.checkCollision(Math.floor(wantedX / Tanks.tileSize), Math.floor((wantedY + this.tankBase.height) / Tanks.tileSize)) &&
