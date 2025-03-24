@@ -94,6 +94,78 @@ export default class SelectLevel extends Scene {
 
   public override render(canvas: HTMLCanvasElement): void {
     CanvasRenderer.drawResizedImage(canvas, this.bgImage, 0, 0, this.maxX, this.maxY);
+
+    const lockedLevelSprite: HTMLImageElement = CanvasRenderer.loadNewImage('assets/LevelSelection/LockedLevelIcon.png');
+
+    let levelCompare: number = Tanks.levelReached;
+    if (this.screenNumber === 1) {
+      levelCompare = 10;
+    } else if (this.screenNumber === 2) {
+      levelCompare = 20;
+    } else if (this.screenNumber === 3) {
+      levelCompare = 30;
+    } else if (this.screenNumber === 4) {
+      levelCompare = 40;
+    } else if (this.screenNumber === 5) {
+      levelCompare = 50;
+    } else if (this.screenNumber === 6) {
+      levelCompare = 60;
+    }
+
+    console.log('levelReached: ' + Tanks.levelReached);
+    console.log(levelCompare - 9);
+
+    if (this.screenNumber !== 0 && this.screenNumber !== 6) {
+      if (Tanks.levelReached < levelCompare - 9) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 224, 224);
+      }
+      if (Tanks.levelReached < levelCompare - 8) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 352, 224);
+      }
+      if (Tanks.levelReached < levelCompare - 7) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 480, 224);
+      }
+      if (Tanks.levelReached < levelCompare - 6) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 224, 352);
+      }
+      if (Tanks.levelReached < levelCompare - 5) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 352, 352);
+      }
+      if (Tanks.levelReached < levelCompare - 4) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 480, 352);
+      }
+      if (Tanks.levelReached < levelCompare - 3) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 224, 480);
+      }
+      if (Tanks.levelReached < levelCompare - 2) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 352, 480);
+      }
+      if (Tanks.levelReached < levelCompare - 1) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 480, 480);
+      }
+      if (Tanks.levelReached < levelCompare) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 352, 608);
+      }
+    } else if (this.screenNumber === 6) {
+      if (Tanks.levelReached < levelCompare - 49 && Tanks.extraLevelReached < 1) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 480, 160);
+      }
+      if (Tanks.levelReached < levelCompare - 39 && Tanks.extraLevelReached < 2) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 480, 256);
+      }
+      if (Tanks.levelReached < levelCompare - 29 && Tanks.extraLevelReached < 3) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 480, 352);
+      }
+      if (Tanks.levelReached < levelCompare - 19 && Tanks.extraLevelReached < 4) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 480, 448);
+      }
+      if (Tanks.levelReached < levelCompare - 9 && Tanks.extraLevelReached < 5) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 480, 544);
+      }
+      if (Tanks.extraLevelReached < 6) {
+        CanvasRenderer.drawImage(canvas, lockedLevelSprite, 480, 640);
+      }
+    }
   }
 
   public moveToScreen(screenNumber: number): void {
