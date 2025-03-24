@@ -38,6 +38,8 @@ export default abstract class Level extends Scene {
 
   protected levelState: string;
 
+  protected waitTimer: number;
+
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
 
@@ -81,6 +83,7 @@ export default abstract class Level extends Scene {
 
     // Ongoing = run as normal, Complete = show results screen, Ended = go to levelselect with succes, Failed = show defeat screen, Aborted = go to levelselect with failure, Restart = replay the level
     this.levelState = 'Ongoing';
+    this.waitTimer = 1000;
   }
 
   public abstract spawnTanks(): void;
@@ -115,17 +118,20 @@ export default abstract class Level extends Scene {
         this.player1.setMovementDirection('Still');
       }
     } else if (this.levelState === 'Complete') {
-      if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
+      if ((keyListener.keyPressed(KeyListener.KEY_SPACE) || mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) && this.waitTimer <= 0) {
         this.levelState = 'Ended';
       }
     } else if (this.levelState === 'Failed') {
-      if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
+      if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT) && this.waitTimer <= 0) {
         if (this.leaveButton.isCollidingWithCursor(mouseListener)) {
           this.levelState = 'Aborted';
         } else if (this.againButton.isCollidingWithCursor(mouseListener)) {
           this.levelState = 'Restart';
         }
       }
+    }
+    if (keyListener.keyPressed(KeyListener.KEY_M)) {
+      this.levelState = 'Aborted';
     }
   }
 
@@ -187,6 +193,8 @@ export default abstract class Level extends Scene {
       if (this.player1.getShouldBeDestroyed()) {
         this.levelState = 'Failed';
       }
+    } else {
+      this.waitTimer -= elapsed;
     }
   }
 
@@ -287,9 +295,15 @@ export default abstract class Level extends Scene {
     }
     if (this.levelState === 'Failed') {
       CanvasRenderer.drawImage(canvas, this.defeatScreen, (this.maxX / 2) - (this.defeatScreen.width / 2), (this.maxY / 2) - (this.defeatScreen.height / 2));
-      this.againButton.render(canvas);
-      this.leaveButton.render(canvas);
+      if (this.waitTimer <= 0) {
+        this.againButton.render(canvas);
+        this.leaveButton.render(canvas);
+      }
     }
+  }
+
+  public drawDefeatScreen(canvas: HTMLCanvasElement): void {
+
   }
 
   /**

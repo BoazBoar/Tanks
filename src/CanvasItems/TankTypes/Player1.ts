@@ -17,7 +17,7 @@ export default class Player1 extends TankObjects {
 
     this.tankBarrel = CanvasRenderer.loadNewImage('assets/TankSprites/tanksPlayer1.png');
     this.speed = 0.07;
-    this.bulletsLeft = 9;
+    this.bulletsLeft = 5;
   }
 
   public override shoot(): void {
