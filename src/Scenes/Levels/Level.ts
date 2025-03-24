@@ -9,6 +9,7 @@ import KeyListener from '../../Tools/KeyListener.js';
 import MouseListener from '../../Tools/MouseListener.js';
 import { Vector2 } from '../../Types.js';
 import Scene from '../Scene.js';
+import Symbol from '../../Symbol.js';
 
 export default abstract class Level extends Scene {
   protected levelMapBackground: HTMLImageElement;
@@ -32,6 +33,8 @@ export default abstract class Level extends Scene {
   protected player2SpawnCoördinates: Vector2;
 
   protected numberOfEnemyTanks: number;
+
+  protected numberOfTanksDestroyed: number;
 
   protected levelState: string;
 
@@ -74,6 +77,8 @@ export default abstract class Level extends Scene {
     // TODO: Player 2 here
 
     this.numberOfEnemyTanks = 0;
+    this.numberOfTanksDestroyed = 0;
+
     // Ongoing = run as normal, Complete = show results screen, Ended = go to levelselect with succes, Failed = show defeat screen, Aborted = go to levelselect with failure, Restart = replay the level
     this.levelState = 'Ongoing';
   }
@@ -125,26 +130,39 @@ export default abstract class Level extends Scene {
   }
 
   public override update(elapsed: number): void {
+    // Only if the level is still being played
     if (this.levelState === 'Ongoing') {
       for (const object of this.objectArray) {
         object.update(elapsed);
+        // For every bullet inside the objectArray
         if (object instanceof BulletObject) {
           for (const checkObject of this.objectArray) {
-            if (checkObject instanceof TankObjects) {
-              if (object.getOwner() !== checkObject.getName()) {
-                if (object.isCollidingWithItem(checkObject)) {
+            if (object.isCollidingWithItem(checkObject)) {
+              // If a bullet collides with a tank
+              if (checkObject instanceof TankObjects) {
+                if (object.getOwner() !== checkObject.getName() || object.getGracePeriod() <= 0) {
                   console.log(object.getName() + ' collided with: ' + checkObject.getName());
-
-                  object.setShouldBeDestroyed(true);
-
+                  this.numberOfTanksDestroyed += 1;
                   // TODO implement check for player2
+                  // If it wasn't a player that was destroyed reduce the amount of enemy tanks left
                   if (!(checkObject instanceof Player1)) {
                     if (Tanks.currentScene instanceof Level) {
                       Tanks.currentScene.changeNumberOfEnemyTanks(-1);
                     }
                   }
+                  // If the bullet belonged to a player increase their kill count
+                  if (object.getOwner() === 'Player1') {
+                    this.player1.changeTanksDestroyed(1);
+                  }
+                  // Destroy both the bullet and the tank
+                  object.setShouldBeDestroyed(true);
                   checkObject.setShouldBeDestroyed(true);
                 }
+                // If a bullet collides with a different bullet
+              } else if (checkObject instanceof BulletObject && object !== checkObject) {
+                console.log(object.getName() + ' collided with: ' + checkObject.getName());
+                object.setShouldBeDestroyed(true);
+                checkObject.setShouldBeDestroyed(true);
               }
             }
           }
@@ -155,6 +173,7 @@ export default abstract class Level extends Scene {
             this.objectArray.splice(this.objectArray.indexOf(object), 1);
           }
         }
+        // For every tank inside the objectArray
         if (object instanceof TankObjects) {
           if (object.getShouldBeDestroyed()) {
             this.objectArray.splice(this.objectArray.indexOf(object), 1);
@@ -222,6 +241,44 @@ export default abstract class Level extends Scene {
     if (this.levelState === 'Complete') {
       CanvasRenderer.drawImage(canvas, this.resultsScreen, (this.maxX / 2) - (this.resultsScreen.width / 2), (this.maxY / 2) - (this.resultsScreen.height / 2));
       CanvasRenderer.drawImage(canvas, this.levelTitle, (this.maxX / 2) - (this.levelTitle.width / 2), (this.maxY / 3.76) - (this.levelTitle.height / 2));
+      // Show the amount of tanks destroyed by the player
+      const tanksDestroyedPlayer1Array: Symbol[] = [new Symbol(
+        480,
+        400,
+        1,
+        this.player1.getTanksDestroyed().toLocaleString().at(0),
+        0,
+      ),
+      new Symbol(
+        480,
+        400,
+        1,
+        this.player1.getTanksDestroyed().toLocaleString().at(1),
+        1,
+      )];
+      for (let numberIndex: number = tanksDestroyedPlayer1Array.length - 1; numberIndex >= 0; numberIndex--) {
+        const numberInput: Symbol = tanksDestroyedPlayer1Array[numberIndex];
+        numberInput.render(canvas);
+      }
+      // Show the total amount of tanks destroyed
+      const tanksDestroyedTotalArray: Symbol[] = [new Symbol(
+        480,
+        488,
+        1,
+        this.numberOfTanksDestroyed.toLocaleString().at(0),
+        0,
+      ),
+      new Symbol(
+        480,
+        488,
+        1,
+        this.numberOfTanksDestroyed.toLocaleString().at(1),
+        1,
+      )];
+      for (let numberIndex: number = tanksDestroyedTotalArray.length - 1; numberIndex >= 0; numberIndex--) {
+        const numberInput: Symbol = tanksDestroyedTotalArray[numberIndex];
+        numberInput.render(canvas);
+      }
     }
     if (this.levelState === 'Failed') {
       CanvasRenderer.drawImage(canvas, this.defeatScreen, (this.maxX / 2) - (this.defeatScreen.width / 2), (this.maxY / 2) - (this.defeatScreen.height / 2));

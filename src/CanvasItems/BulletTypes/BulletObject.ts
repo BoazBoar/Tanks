@@ -11,6 +11,8 @@ export default abstract class BulletObject extends CanvasItem {
 
   protected bouncesLeft: number;
 
+  protected gracePeriod: number;
+
   protected shouldBeDestroyed: boolean;
 
   public constructor(maxX: number, maxY: number, posX: number, posY: number, angle: number, owner: string) {
@@ -21,6 +23,7 @@ export default abstract class BulletObject extends CanvasItem {
     this.angle = angle;
     this.speed = 0;
     this.bouncesLeft = 0;
+    this.gracePeriod = 20;
     this.shouldBeDestroyed = false;
   }
 
@@ -57,8 +60,22 @@ export default abstract class BulletObject extends CanvasItem {
     }
   }
 
+  public allowedToBounce(): boolean {
+    if (this.bouncesLeft <= 0) {
+      this.shouldBeDestroyed = true;
+      return false;
+    } else {
+      this.bouncesLeft -= 1;
+      return true;
+    }
+  }
+
   public override render(canvas: HTMLCanvasElement): void {
     CanvasRenderer.drawRotatedImage(canvas, this.image, this.position.x, this.position.y, this.image.width, this.image.height, this.angle);
+  }
+
+  public changeGracePeriod(change: number): void {
+    this.gracePeriod += change;
   }
 
   public setShouldBeDestroyed(boolean: boolean): void {
@@ -73,20 +90,8 @@ export default abstract class BulletObject extends CanvasItem {
     return this.bouncesLeft;
   }
 
-  public allowedToBounce(): boolean {
-    if (this.bouncesLeft <= 0) {
-      this.shouldBeDestroyed = true;
-      return false;
-    } else {
-      if (this.owner === 'Player1') {
-        this.owner = 'FreeFromPlayer1';
-      }
-      if (this.owner === 'Player2') {
-        this.owner = 'FreeFromPlayer2';
-      }
-      this.bouncesLeft -= 1;
-      return true;
-    }
+  public getGracePeriod(): number {
+    return this.gracePeriod;
   }
 
   public getShouldBeDestroyed(): boolean {

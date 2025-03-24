@@ -9,13 +9,17 @@ export default class StandardBullet extends BulletObject {
 
     this.image = CanvasRenderer.loadNewImage('assets/tanksStandardBullet.png');
 
-    this.name = 'Standard';
+    this.name = 'StandardBullet';
     this.speed = 0.12;
     this.bouncesLeft = 2;
+    this.gracePeriod = 30;
   }
 
   public override update(elapsed: number): void {
     this.changePosition(this.position.x + elapsed * this.speed * Math.cos(this.angle), this.position.y + elapsed * this.speed * Math.sin(this.angle));
+    if (this.gracePeriod > 0) {
+      this.changeGracePeriod(-1);
+    }
   }
 
   public getImageSize(): Vector2 {
