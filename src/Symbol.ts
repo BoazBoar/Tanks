@@ -18,6 +18,7 @@ export default class Symbol {
   protected symbolName: string | undefined;
 
   public constructor(
+    spriteSheet: HTMLImageElement,
     posX: number,
     posY: number,
     scale: number,
@@ -69,7 +70,7 @@ export default class Symbol {
 
     this.tileSize = Tanks.tileSize;
     this.sprite = {
-      image: CanvasRenderer.loadNewImage('assets/SymbolsBeige.png'),
+      image: spriteSheet,
       x: sourceX,
       y: sourceY,
       width: 32,

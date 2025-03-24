@@ -242,7 +242,9 @@ export default abstract class Level extends Scene {
       CanvasRenderer.drawImage(canvas, this.resultsScreen, (this.maxX / 2) - (this.resultsScreen.width / 2), (this.maxY / 2) - (this.resultsScreen.height / 2));
       CanvasRenderer.drawImage(canvas, this.levelTitle, (this.maxX / 2) - (this.levelTitle.width / 2), (this.maxY / 3.76) - (this.levelTitle.height / 2));
       // Show the amount of tanks destroyed by the player
+      const symbolSpritesheet: HTMLImageElement = CanvasRenderer.loadNewImage('assets/SymbolsBeige.png');
       const tanksDestroyedPlayer1Array: Symbol[] = [new Symbol(
+        symbolSpritesheet,
         480,
         400,
         1,
@@ -250,6 +252,7 @@ export default abstract class Level extends Scene {
         0,
       ),
       new Symbol(
+        symbolSpritesheet,
         480,
         400,
         1,
@@ -262,6 +265,7 @@ export default abstract class Level extends Scene {
       }
       // Show the total amount of tanks destroyed
       const tanksDestroyedTotalArray: Symbol[] = [new Symbol(
+        symbolSpritesheet,
         480,
         488,
         1,
@@ -269,6 +273,7 @@ export default abstract class Level extends Scene {
         0,
       ),
       new Symbol(
+        symbolSpritesheet,
         480,
         488,
         1,
