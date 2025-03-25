@@ -1,3 +1,4 @@
+import BrownTank from '../../CanvasItems/TankTypes/BrownTank.js';
 import WhiteTank from '../../CanvasItems/TankTypes/WhiteTank.js';
 import Tanks from '../../Tanks.js';
 import Scene from '../Scene.js';
@@ -51,8 +52,8 @@ export default class Level1 extends Level {
 
     // TODO: Change to Enemy Brown Tank
     const whiteTankSpriteSheet: HTMLImageElement = new Image();
-    whiteTankSpriteSheet.src = 'assets/TankSprites/tanksWhiteTankSpriteSheet.png';
-    const whiteTank1: WhiteTank = new WhiteTank(
+    whiteTankSpriteSheet.src = 'assets/TankSprites/tanksBrownTankSpriteSheet.png';
+    const whiteTank1: BrownTank = new BrownTank(
       this.maxX,
       this.maxY,
       {
@@ -64,7 +65,7 @@ export default class Level1 extends Level {
       },
       18,
       14,
-      'WhiteTank1',
+      'BrownTank1',
       'Left');
 
     this.objectArray.push(this.player1, whiteTank1);
