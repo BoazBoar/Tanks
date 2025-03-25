@@ -112,9 +112,6 @@ export default class SelectLevel extends Scene {
       levelCompare = 60;
     }
 
-    console.log('levelReached: ' + Tanks.levelReached);
-    console.log(levelCompare - 9);
-
     if (this.screenNumber !== 0 && this.screenNumber !== 6) {
       if (Tanks.levelReached < levelCompare - 9) {
         CanvasRenderer.drawImage(canvas, lockedLevelSprite, 224, 224);

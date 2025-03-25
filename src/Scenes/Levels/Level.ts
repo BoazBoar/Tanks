@@ -172,9 +172,14 @@ export default abstract class Level extends Scene {
               }
             }
           }
+          // If a bullet is destroyed give the original owner a bullet back
           if (object.getShouldBeDestroyed()) {
-            if (object.getOwner() === 'Player1' || object.getOwner() === 'FreeFromPlayer1') {
-              this.player1.changeBulletsLeft(1);
+            for (const ownerObject of this.objectArray) {
+              if (ownerObject instanceof TankObjects) {
+                if (object.getOwner() === ownerObject.getName()) {
+                  ownerObject.changeBulletsLeft(1);
+                };
+              }
             }
             this.objectArray.splice(this.objectArray.indexOf(object), 1);
           }
