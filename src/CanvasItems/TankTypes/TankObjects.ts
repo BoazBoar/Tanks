@@ -17,6 +17,10 @@ export default abstract class TankObjects extends CanvasItem {
 
   protected barrelAngle: number;
 
+  protected barrelAngleOriginal: number;
+
+  protected barrelTurnSpeed: number;
+
   protected bulletSpawnPoint: Vector2;
 
   protected width: number;
@@ -47,16 +51,6 @@ export default abstract class TankObjects extends CanvasItem {
     this.tankBarrel = CanvasRenderer.loadNewImage('');
     this.tankBarrelRelativeX = (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2));
     this.tankBarrelRelativeY = (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5));
-    this.barrelAngle = 0;
-    this.bulletSpawnPoint = { x: (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)), y: (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5)) };
-    this.position = { x: posX * Tanks.tileSize, y: posY * Tanks.tileSize };
-    this.width = sprite.width;
-    this.height = sprite.height;
-    this.speed = 0;
-    this.bulletsLeft = 0;
-    this.name = name;
-    this.currentMovementDirection = 'Still';
-    this.lastMovementDirection = 'Still';
     if (facing === 'Right') {
       this.barrelAngle = 0;
     } else if (facing === 'Left') {
@@ -73,7 +67,20 @@ export default abstract class TankObjects extends CanvasItem {
       this.barrelAngle = 3 * (-Math.PI / 4);
     } else if (facing === 'LeftDown') {
       this.barrelAngle = 3 * (Math.PI / 4);
+    } else {
+      this.barrelAngle = 0;
     }
+    this.barrelAngleOriginal = this.barrelAngle;
+    this.barrelTurnSpeed = 0;
+    this.bulletSpawnPoint = { x: (this.position.x - (this.tankBarrel.width / 2) + (this.tankBase.width / 2)), y: (this.position.y - (this.tankBarrel.height / 2) + (this.tankBase.height / 2.5)) };
+    this.position = { x: posX * Tanks.tileSize, y: posY * Tanks.tileSize };
+    this.width = sprite.width;
+    this.height = sprite.height;
+    this.speed = 0;
+    this.bulletsLeft = 0;
+    this.name = name;
+    this.currentMovementDirection = 'Still';
+    this.lastMovementDirection = 'Still';
 
     this.shouldBeDestroyed = false;
     this.tanksDestroyed = 0;
@@ -225,7 +232,7 @@ export default abstract class TankObjects extends CanvasItem {
   }
 
   public setBarrelAngle(x: number, y: number): void {
-    this.barrelAngle = Math.atan2(y, x);
+    this.barrelAngle = Math.atan2(y, x) + (2 * Math.PI);
   }
 
   public setSpawnPoint(col: number, row: number): void {
