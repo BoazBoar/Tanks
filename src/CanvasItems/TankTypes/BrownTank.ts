@@ -28,7 +28,7 @@ export default class BrownTank extends TankObjects {
     this.angleSwitch = false;
     this.speed = 0;
     this.bulletsLeft = 1;
-    this.randomShootTime = 5000 + (Math.random() * 5000);
+    this.randomShootTime = 4000 + (Math.random() * 6000);
     this.randomMoveTime = 5000 + (Math.random() * 5000);
     this.randomWaitToMoveTime = 2000 + (Math.random() * 2000);
     this.currentMovementDirection = facing;
@@ -66,7 +66,7 @@ export default class BrownTank extends TankObjects {
       if (this.randomShootTime <= 0) {
         if (this.barrelAngle) {
           this.shoot();
-          this.randomShootTime = 5000 + (Math.random() * 5000);
+          this.randomShootTime = 4000 + (Math.random() * 6000);
         }
       } else {
         this.randomShootTime -= elapsed;
