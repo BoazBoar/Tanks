@@ -64,10 +64,8 @@ export default class BrownTank extends TankObjects {
       }
 
       if (this.randomShootTime <= 0) {
-        if (this.barrelAngle) {
-          this.shoot();
-          this.randomShootTime = 4000 + (Math.random() * 6000);
-        }
+        this.shoot();
+        this.randomShootTime = 4000 + (Math.random() * 6000);
       } else {
         this.randomShootTime -= elapsed;
       }
