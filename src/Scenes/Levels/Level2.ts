@@ -10,6 +10,7 @@ export default class Level2 extends Level {
 
     this.levelMapBackground.src = 'assets/LevelBackgrounds/tanksWorld1Level2Background.png';
     this.levelMapForeground.src = 'assets/LevelForegrounds/tanksWorld1Level2Foreground.png';
+    this.levelTitle.src = 'assets/LevelTitles/World1Level2Title.png';
 
     if (Tanks.multiplayer) {
       this.player1SpawnCoördinates = { x: 3, y: 16 };
