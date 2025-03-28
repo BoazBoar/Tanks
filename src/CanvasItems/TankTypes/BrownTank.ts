@@ -84,6 +84,9 @@ export default class BrownTank extends TankObjects {
   }
 
   public override getBulletType(): BulletObject {
-    return new StandardBullet(this.maxX, this.maxY, this.tankBarrelRelativeX, this.tankBarrelRelativeY, this.barrelAngle, this.name);
+    // The bullet spawnpoint now uses hardcoded values, maybe in the future i can use the width and height of the bullet image
+    this.bulletSpawnPoint = { x: (this.tankBarrelRelativeX - (12 / 2) + (this.tankBarrel.width / 2)), y: (this.tankBarrelRelativeY - (8 / 2) + (this.tankBarrel.height / 2.5)) };
+
+    return new StandardBullet(this.maxX, this.maxY, this.bulletSpawnPoint.x, this.bulletSpawnPoint.y, this.barrelAngle, this.name);
   }
 }
