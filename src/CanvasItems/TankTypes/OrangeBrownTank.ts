@@ -2,11 +2,11 @@ import CanvasRenderer from '../../Tools/CanvasRenderer.js';
 import { Sprite } from '../../Types.js';
 import TankObjects from './TankObjects.js';
 import BulletObject from '../BulletTypes/BulletObject.js';
-import StandardBullet from '../BulletTypes/StandardBullet.js';
 import Tanks from '../../Tanks.js';
 import Level from '../../Scenes/Levels/Level.js';
+import NoBounceBullet from '../BulletTypes/NoBounceBullet.js';
 
-export default class BrownTank extends TankObjects {
+export default class OrangeBrownTank extends TankObjects {
   private angleSwitch: boolean;
 
   private randomShootTime: number;
@@ -23,14 +23,14 @@ export default class BrownTank extends TankObjects {
     facing: string) {
     super(maxX, maxY, sprite, posX, posY, name, facing);
 
-    this.tankBarrel = CanvasRenderer.loadNewImage('assets/TankSprites/tanksBrownTankBarrel.png');
-    this.barrelTurnSpeed = 1 / 1000;
+    this.tankBarrel = CanvasRenderer.loadNewImage('assets/TankSprites/tanksOrangeBrownTankBarrel.png');
+    this.barrelTurnSpeed = 1.4 / 1000;
     this.angleSwitch = false;
     this.speed = 0;
-    this.bulletsLeft = 1;
-    this.randomShootTime = 4000 + (Math.random() * 6000);
-    this.randomMoveTime = 5000 + (Math.random() * 5000);
-    this.randomWaitToMoveTime = 2000 + (Math.random() * 2000);
+    this.bulletsLeft = 2;
+    this.randomShootTime = 2000 + (Math.random() * 3500);
+    this.randomMoveTime = 5000 + (Math.random() * 2000);
+    this.randomWaitToMoveTime = 1000 + (Math.random() * 2000);
     this.currentMovementDirection = facing;
     this.lastMovementDirection = facing;
   }
@@ -44,18 +44,18 @@ export default class BrownTank extends TankObjects {
 
       if (this.randomMoveTime <= 0) {
         if (this.randomWaitToMoveTime <= 0) {
-          this.randomMoveTime = 5000 + (Math.random() * 5000);
-          this.randomWaitToMoveTime = 2000 + (Math.random() * 2000);
+          this.randomMoveTime = 5000 + (Math.random() * 2000);
+          this.randomWaitToMoveTime = 1000 + (Math.random() * 2000);
         } else {
           this.randomWaitToMoveTime -= elapsed;
         }
       } else {
-        if (this.barrelAngle <= this.barrelAngleOriginal + (Math.PI / 3) && this.angleSwitch === false) {
+        if (this.barrelAngle <= this.barrelAngleOriginal + (Math.PI / 4) && this.angleSwitch === false) {
           this.barrelAngle += (this.barrelTurnSpeed) * elapsed;
         } else {
           this.angleSwitch = true;
         }
-        if (this.barrelAngle >= this.barrelAngleOriginal - (Math.PI / 3) && this.angleSwitch === true) {
+        if (this.barrelAngle >= this.barrelAngleOriginal - (Math.PI / 4) && this.angleSwitch === true) {
           this.barrelAngle -= (this.barrelTurnSpeed) * elapsed;
         } else {
           this.angleSwitch = false;
@@ -65,7 +65,7 @@ export default class BrownTank extends TankObjects {
 
       if (this.randomShootTime <= 0) {
         this.shoot();
-        this.randomShootTime = 4000 + (Math.random() * 6000);
+        this.randomShootTime = 2000 + (Math.random() * 3500);
       } else {
         this.randomShootTime -= elapsed;
       }
@@ -87,6 +87,6 @@ export default class BrownTank extends TankObjects {
     // The bullet spawnpoint now uses hardcoded values, maybe in the future i can use the width and height of the bullet image
     this.bulletSpawnPoint = { x: (this.tankBarrelRelativeX - (12 / 2) + (this.tankBarrel.width / 2)), y: (this.tankBarrelRelativeY - (8 / 2) + (this.tankBarrel.height / 2.5)) };
 
-    return new StandardBullet(this.maxX, this.maxY, this.bulletSpawnPoint.x, this.bulletSpawnPoint.y, this.barrelAngle, this.name);
+    return new NoBounceBullet(this.maxX, this.maxY, this.bulletSpawnPoint.x, this.bulletSpawnPoint.y, this.barrelAngle, this.name);
   }
 }
