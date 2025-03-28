@@ -4,7 +4,7 @@ import TankObjects from './TankObjects.js';
 import BulletObject from '../BulletTypes/BulletObject.js';
 import Tanks from '../../Tanks.js';
 import Level from '../../Scenes/Levels/Level.js';
-import StandardBullet from '../BulletTypes/StandardBullet.js';
+import NoBounceBullet from '../BulletTypes/NoBounceBullet.js';
 
 export default class OrangeBrownTank extends TankObjects {
   private angleSwitch: boolean;
@@ -84,6 +84,6 @@ export default class OrangeBrownTank extends TankObjects {
   }
 
   public override getBulletType(): BulletObject {
-    return new StandardBullet(this.maxX, this.maxY, this.tankBarrelRelativeX, this.tankBarrelRelativeY, this.barrelAngle, this.name);
+    return new NoBounceBullet(this.maxX, this.maxY, this.tankBarrelRelativeX, this.tankBarrelRelativeY, this.barrelAngle, this.name);
   }
 }

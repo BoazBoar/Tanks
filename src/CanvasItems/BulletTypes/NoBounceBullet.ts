@@ -2,15 +2,15 @@ import CanvasRenderer from '../../Tools/CanvasRenderer.js';
 import { Vector2 } from '../../Types.js';
 import BulletObject from './BulletObject.js';
 
-export default class StandardBullet extends BulletObject {
+export default class NoBounceBullet extends BulletObject {
   public constructor(maxX: number, maxY: number, posX: number, posY: number, angle: number, owner: string) {
     super(maxX, maxY, posX, posY, angle, owner);
 
     this.image = CanvasRenderer.loadNewImage('assets/tanksStandardBullet.png');
 
-    this.name = 'StandardBullet';
+    this.name = 'NoBounceBullet';
     this.speed = 0.12;
-    this.bouncesLeft = 1;
+    this.bouncesLeft = 0;
     this.gracePeriod = 30;
   }
 
