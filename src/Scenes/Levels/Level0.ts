@@ -122,8 +122,10 @@ export default class Level0 extends Level {
     if (this.levelState === 'Ended' || this.levelState === 'Aborted') {
       if (Tanks.levelReached <= 0 && this.levelState === 'Ended') {
         Tanks.levelReached = 1;
+        return new SelectLevel(this.maxX, this.maxY, 1);
+      } else if (this.levelState === 'Aborted') {
+        return new SelectLevel(this.maxX, this.maxY, 0);
       }
-      return new SelectLevel(this.maxX, this.maxY, 1);
     } else if (this.levelState === 'Restart') {
       return new Level0(this.maxX, this.maxY);
     }
