@@ -50,12 +50,12 @@ export default class OrangeBrownTank extends TankObjects {
           this.randomWaitToMoveTime -= elapsed;
         }
       } else {
-        if (this.barrelAngle <= this.barrelAngleOriginal + (Math.PI / 4) && this.angleSwitch === false) {
+        if (this.barrelAngle <= this.barrelAngleOriginal + (Math.PI / 6) && this.angleSwitch === false) {
           this.barrelAngle += (this.barrelTurnSpeed) * elapsed;
         } else {
           this.angleSwitch = true;
         }
-        if (this.barrelAngle >= this.barrelAngleOriginal - (Math.PI / 4) && this.angleSwitch === true) {
+        if (this.barrelAngle >= this.barrelAngleOriginal - (Math.PI / 6) && this.angleSwitch === true) {
           this.barrelAngle -= (this.barrelTurnSpeed) * elapsed;
         } else {
           this.angleSwitch = false;
