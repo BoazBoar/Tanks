@@ -48,6 +48,8 @@ export default class Level0 extends Level {
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ];
+
+    this.bulletCollisionArray = this.collisionArray;
   }
 
   public spawnTanks(): void {

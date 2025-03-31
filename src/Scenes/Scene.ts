@@ -43,6 +43,8 @@ export default abstract class Scene {
 
   public abstract checkCollision(col: number, row: number): boolean;
 
+  public abstract checkBulletCollision(col: number, row: number): boolean;
+
   /**
    * getNextScene returns null and does nothing, if it returns a Scene
    * we change WereldWinkel.currentScene to provided Scene

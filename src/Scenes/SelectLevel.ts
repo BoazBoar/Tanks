@@ -84,6 +84,10 @@ export default class SelectLevel extends Scene {
     return false;
   }
 
+  public override checkBulletCollision(col: number, row: number): boolean {
+    return false;
+  }
+
   public override getNextScene(): Scene | null {
     if (this.levelNumber === 0) {
       return new Level0(this.maxX, this.maxY);
