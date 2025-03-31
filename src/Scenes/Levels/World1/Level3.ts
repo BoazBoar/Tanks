@@ -1,8 +1,8 @@
-import BrownTank from '../../CanvasItems/TankTypes/BrownTank.js';
-import Tanks from '../../Tanks.js';
-import Scene from '../Scene.js';
-import SelectLevel from '../SelectLevel.js';
-import Level from './Level.js';
+import BrownTank from '../../../CanvasItems/TankTypes/BrownTank.js';
+import Tanks from '../../../Tanks.js';
+import Scene from '../../Scene.js';
+import SelectLevel from '../../SelectLevel.js';
+import Level from '../Level.js';
 
 export default class Level3 extends Level {
   public constructor(maxX: number, maxY: number) {
