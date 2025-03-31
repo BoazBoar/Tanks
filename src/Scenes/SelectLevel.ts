@@ -5,9 +5,10 @@ import KeyListener from '../Tools/KeyListener.js';
 import MouseListener from '../Tools/MouseListener.js';
 import { Vector2 } from '../Types.js';
 import Level0 from './Levels/Level0.js';
-import Level1 from './Levels/Level1.js';
-import Level2 from './Levels/Level2.js';
-import Level3 from './Levels/Level3.js';
+import Level1 from './Levels/World1/Level1.js';
+import Level2 from './Levels/World1/Level2.js';
+import Level3 from './Levels/World1/Level3.js';
+import Level4 from './Levels/World1/Level4.js';
 import Scene from './Scene.js';
 
 export default class SelectLevel extends Scene {
@@ -100,6 +101,9 @@ export default class SelectLevel extends Scene {
     }
     if (this.levelNumber === 3) {
       return new Level3(this.maxX, this.maxY);
+    }
+    if (this.levelNumber === 4) {
+      return new Level4(this.maxX, this.maxY);
     }
     return null;
   }
