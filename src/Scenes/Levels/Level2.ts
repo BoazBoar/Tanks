@@ -92,8 +92,10 @@ export default class Level2 extends Level {
     if (this.levelState === 'Ended' || this.levelState === 'Aborted') {
       if (Tanks.levelReached <= 2 && this.levelState === 'Ended') {
         Tanks.levelReached = 3;
+        return new SelectLevel(this.maxX, this.maxY, 1);
+      } else if (this.levelState === 'Aborted') {
+        return new SelectLevel(this.maxX, this.maxY, 1);
       }
-      return new SelectLevel(this.maxX, this.maxY, 1);
     } else if (this.levelState === 'Restart') {
       return new Level2(this.maxX, this.maxY);
     }

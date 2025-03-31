@@ -120,8 +120,10 @@ export default class Level3 extends Level {
     if (this.levelState === 'Ended' || this.levelState === 'Aborted') {
       if (Tanks.levelReached <= 3 && this.levelState === 'Ended') {
         Tanks.levelReached = 4;
+        return new SelectLevel(this.maxX, this.maxY, 1);
+      } else if (this.levelState === 'Aborted') {
+        return new SelectLevel(this.maxX, this.maxY, 1);
       }
-      return new SelectLevel(this.maxX, this.maxY, 1);
     } else if (this.levelState === 'Restart') {
       return new Level3(this.maxX, this.maxY);
     }
