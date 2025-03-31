@@ -84,6 +84,10 @@ export default class Menu extends Scene {
     return false;
   }
 
+  public override checkBulletCollision(col: number, row: number): boolean {
+    return false;
+  }
+
   /**
    * Get the NextScene (Store) when the player is ready.
    * @returns (Scene | null)
